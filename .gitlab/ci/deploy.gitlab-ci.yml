@@ -16,6 +16,7 @@ deploy-to-heroku:
       changes:
         - app
         - test
-        - .gitlab*
+        - .gitlab-ci.yml
+        - .gitlab/**
         - poetry.lock
       when: on_success

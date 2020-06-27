@@ -17,6 +17,7 @@ unit-test-and-coverage:
     - changes:
       - app
       - test
-      - .gitlab*
+      - .gitlab-ci.yml
+      - .gitlab/**
       - poetry.lock
       when: always
