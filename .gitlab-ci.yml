@@ -1,0 +1,15 @@
+stages:
+  - testing
+  - deploy
+
+variables:
+  HEROKU_RUNTIME: "python-3.8.2"
+
+cache:
+  key: "$CI_COMMIT_SHA"
+  paths:
+    - requirements.txt
+
+include:
+  - local: .gitlab/ci/unit-tests.gitlab-ci.yml
+  - local: .gitlab/ci/deploy.gitlab-ci.yml

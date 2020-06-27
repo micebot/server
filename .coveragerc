@@ -1,0 +1,11 @@
+[run]
+data_file = test/unit/.coverage
+source = server
+
+[report]
+exclude_lines =
+    pragma: no cover
+fail_under = 90
+
+[html]
+directory = test/unit/coverage

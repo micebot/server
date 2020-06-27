@@ -1,0 +1,12 @@
+# Python
+*.pyc
+__pycache__
+*.egg-info
+
+# Editors / IDEs
+.idea
+.vscode
+
+# Test / Coverage
+test/unit/.coverage
+test/unit/coverage
