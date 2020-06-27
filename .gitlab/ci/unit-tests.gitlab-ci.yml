@@ -20,4 +20,4 @@ unit-test-and-coverage:
       - .gitlab-ci.yml
       - .gitlab/**
       - poetry.lock
-      when: always
+    - when: always
