@@ -13,10 +13,10 @@ unit-test-and-coverage:
 
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-  only:
-    changes:
+  rules:
+    - changes:
       - app
       - test
-      - .gitlab-ci.yml
-      - .gitlab/ci/**
+      - .gitlab*
       - poetry.lock
+      when: always
