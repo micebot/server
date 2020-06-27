@@ -11,13 +11,12 @@ deploy-to-heroku:
   dependencies:
     - unit-test-and-coverage
 
-  only:
-    refs:
-      - master
-
-    changes:
-      - app
-      - test
-      - .gitlab-ci.yml
-      - .gitlab/ci/**
-      - poetry.lock
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - app
+        - test
+        - .gitlab-ci.yml
+        - .gitlab/**
+        - poetry.lock
+      when: on_success

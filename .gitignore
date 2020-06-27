@@ -8,5 +8,6 @@ __pycache__
 .vscode
 
 # Test / Coverage
-test/unit/.coverage
+.coverage
+coverage.xml
 test/unit/coverage
