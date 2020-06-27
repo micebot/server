@@ -12,7 +12,7 @@ deploy-to-heroku:
     - unit-test-and-coverage
 
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master'
+    - if: '$CI_COMMIT_BRANCH == "master"'
       changes:
         - app
         - test
