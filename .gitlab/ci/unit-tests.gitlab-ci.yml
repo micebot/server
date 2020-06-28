@@ -9,7 +9,6 @@ unit-test-and-coverage:
     - poetry run pylama server
     - poetry run coverage run -m unittest discover -s test/unit -v
     - poetry run coverage report
-    - poetry run codecov --token=$CODECOV_TOKEN
 
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
