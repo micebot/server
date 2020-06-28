@@ -1,18 +1,18 @@
-from datetime import datetime
+from datetime import datetime  # pragma: no cover
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey  # pragma: no cover  # noqa
+from sqlalchemy.ext.declarative import declarative_base  # pragma: no cover
+from sqlalchemy.orm import relationship  # pragma: no cover
 
 Base = declarative_base()
 
 
-class Entity(Base):
+class Entity(Base):  # pragma: no cover
     __abstract__ = True
     id = Column(Integer, nullable=False, primary_key=True, index=True)
 
 
-class Product(Entity):
+class Product(Entity):  # pragma: no cover
     __tablename__ = "product"
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
@@ -23,7 +23,7 @@ class Product(Entity):
         return str(self.__dict__)
 
 
-class Order(Entity):
+class Order(Entity):  # pragma: no cover
     __tablename__ = "order"
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
