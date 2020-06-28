@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey  #
 from sqlalchemy.ext.declarative import declarative_base  # pragma: no cover
 from sqlalchemy.orm import relationship  # pragma: no cover
 
-Base = declarative_base()
+Base = declarative_base()  # pragma: no cover
 
 
 class Entity(Base):  # pragma: no cover
