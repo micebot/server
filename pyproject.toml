@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "app"
+name = "server"
 version = "0.1.0"
 description = "The Micebot core application."
 authors = ["MiceBot Collaborators."]
 license = "MIT"
+repository = "https://github.com/micebot/server.git"
 
 [tool.poetry.dependencies]
 python = "^3.8"
