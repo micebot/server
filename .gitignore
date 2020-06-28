@@ -11,3 +11,6 @@ __pycache__
 .coverage
 coverage.xml
 test/unit/coverage
+
+# Local databases (development)
+*.db

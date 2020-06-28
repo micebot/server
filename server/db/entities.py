@@ -29,7 +29,7 @@ class Order(Entity):  # pragma: no cover
     mod_display_name = Column(String, nullable=False)
     owner_display_name = Column(String, nullable=False)
     requested_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    product_id = Column(String, ForeignKey("product.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
     product = relationship("Product")
 
     def __repr__(self):

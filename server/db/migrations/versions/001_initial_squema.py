@@ -34,7 +34,7 @@ def upgrade():
         sa.Column("mod_display_name", sa.String(), nullable=False),
         sa.Column("owner_display_name", sa.String(), nullable=False),
         sa.Column("requested_at", sa.DateTime(), nullable=False),
-        sa.Column("product_id", sa.String(), nullable=False),
+        sa.Column("product_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["product_id"], ["product.id"],),
         sa.PrimaryKeyConstraint("id"),
     )
