@@ -13,7 +13,7 @@
         <img src="https://codecov.io/gh/micebot/server/branch/development/graph/badge.svg" />
     </a>
     <a href='https://github.com/micebot/server/issues'>
-        <img src='https://badgen.net/github/issues/micebot/server'>
+        <img src='https://badgen.net/github/open-issues/micebot/server'>
     </a>
     <a href='https://github.com/micebot/server/commits/development'>
         <img src='https://badgen.net/github/last-commit/micebot/server/development'>
