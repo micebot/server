@@ -31,7 +31,7 @@ cupons contendo o código de e-books sorteados durante as lives do canal [@codig
 [2]:https://gitlab.com/micebot/server-ci/-/commits/development
 [3]:https://gitlab.com/micebot/server-ci/badges/development/coverage.svg
 [4]:https://gitlab.com/micebot/server-ci/-/commits/development
-[5]:https://gitlab.com/micebot/server-ci/badges/master/coverage.svg
+[5]:https://gitlab.com/micebot/server-ci/badges/master/pipeline.svg
 [6]:https://gitlab.com/micebot/server-ci/-/commits/master
 [7]:https://gitlab.com/micebot/server-ci/badges/master/coverage.svg
 [8]:https://gitlab.com/micebot/server-ci/-/commits/master
