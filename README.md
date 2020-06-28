@@ -17,7 +17,7 @@
 <br>
 
 **MiceBot** é uma aplicação desenvolvida durante o [#desafio333][9] com objetivo de tornar automatizado todo o processo de entrega de
-cupons contendo o código de e-books sorteados durante as lives do canal [@codigofalado][10]. Este é, ainda, um trabalho em progresso. 🧀
+cupons de e-books sorteados durante as lives do canal [@codigofalado][10]. Este é, ainda, um trabalho em progresso. 🧀
 <br>
 
 ## Development status
