@@ -1,7 +1,5 @@
-deploy-to-heroku:
-
-  stage: deploy
-  image: ruby:2.7
+deploy to heroku:
+  <<: *deploy
 
   script:
     - echo "$HEROKU_RUNTIME" > runtime.txt
@@ -9,14 +7,8 @@ deploy-to-heroku:
     - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
 
   dependencies:
-    - unit-test-and-coverage
+    - unit tests
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
-      changes:
-        - app
-        - test
-        - .gitlab-ci.yml
-        - .gitlab/**
-        - poetry.lock
       when: on_success
