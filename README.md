@@ -17,7 +17,12 @@
 <br>
 
 **MiceBot** é uma aplicação desenvolvida durante o [#desafio333][9] com objetivo de tornar automatizado todo o processo de entrega de
-cupons de e-books sorteados durante as lives do canal [@codigofalado][10]. Este é, ainda, um trabalho em progresso. 🧀
+cupons de e-books sorteados durante as lives do canal [@codigofalado][10].
+
+Este repositório contém o "_core_" da aplicação, isto é, onde todas as regras são centralizadas. Disponibilizamos uma API que permite
+a integração com outras aplicações da organização [**@micebot**][13]: utilizada pelo [pubsub][11] e o nosso [bot do Discord][12].
+
+> Este é, ainda, um trabalho em progresso. 🧀
 <br>
 
 ## Development status
@@ -37,3 +42,6 @@ cupons de e-books sorteados durante as lives do canal [@codigofalado][10]. Este 
 [8]:https://gitlab.com/micebot/server-ci/-/commits/master
 [9]:https://github.com/codigofalado/desafio333
 [10]:https://www.twitch.tv/codigofalado
+[11]:https://github.com/micebot/pubsub
+[12]:https://github.com/micebot/discord
+[13]:https://github.com/micebot/
