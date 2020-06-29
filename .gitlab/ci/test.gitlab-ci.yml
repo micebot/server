@@ -1,9 +1,6 @@
 .install-deps-template: &install-deps
   before_script:
     - pip install poetry && poetry install
-    - poetry --version
-    - poetry config settings.virtualenvs.in-project true
-    - poetry install -vv
 
 .test-template: &test
   <<: *install-deps
