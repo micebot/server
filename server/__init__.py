@@ -1,3 +1,13 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="MiceBot", description="The MiceBot core.")
+from server.env import env
+from server.routes.products import router as products
+
+app = FastAPI(
+    title="MiceBot",
+    description="The MiceBot core.",
+    debug=not env.production,
+    docs_url="/docs" if not env.production else None,
+    redoc_url="/redoc" if not env.production else None,
+)
+app.include_router(products, prefix="/products", tags=["products"])

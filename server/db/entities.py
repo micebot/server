@@ -1,25 +1,25 @@
-from datetime import datetime  # pragma: no cover
+from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey  # pragma: no cover  # noqa
-from sqlalchemy.ext.declarative import declarative_base  # pragma: no cover
-from sqlalchemy.orm import relationship  # pragma: no cover
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()  # pragma: no cover
+Base = declarative_base()
 
 
-class Entity(Base):  # pragma: no cover
+class Entity(Base):
     __abstract__ = True
     id = Column(Integer, nullable=False, primary_key=True, index=True)
 
 
-class Product(Entity):  # pragma: no cover
+class Product(Entity):
     __tablename__ = "product"
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
     taken = Column(Boolean, nullable=False, default=False)
     taken_at = Column(DateTime, nullable=True)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return str(self.__dict__)
 
 

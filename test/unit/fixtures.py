@@ -1,4 +1,5 @@
-from typing import NoReturn
+from datetime import datetime
+from typing import NoReturn, Optional
 from unittest.case import TestCase
 from unittest.mock import MagicMock
 
@@ -6,6 +7,7 @@ from faker import Faker
 from fastapi.testclient import TestClient
 
 from server import app
+from server.db import open_session
 
 
 class Test(TestCase):
@@ -23,7 +25,15 @@ class TestRoute(Test):
 
     def setUp(self) -> NoReturn:
         self.db = MagicMock()
-        self.app.dependency_overrides[...] = lambda: self.db
+        self.app.dependency_overrides[open_session] = lambda: self.db
 
     def tearDown(self) -> NoReturn:
         self.app.dependency_overrides = {}
+
+
+class TestHelpers:
+    @staticmethod
+    def datetime_to_str(dt: datetime) -> Optional[str]:
+        if not dt:
+            return None
+        return dt.strftime("%Y-%m-%dT%H:%M:%S")

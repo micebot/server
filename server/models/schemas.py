@@ -1,18 +1,22 @@
-from datetime import datetime  # pragma: no cover
+from datetime import datetime
 
-from pydantic import BaseModel  # pragma: no cover
+from pydantic import BaseModel
 
 
-class ProductBase(BaseModel):  # pragma: no cover
+class ProductBase(BaseModel):
     code: str
     summary: str = None
 
 
-class ProductCreation(ProductBase):  # pragma: no cover
+class ProductCreation(ProductBase):
     ...
 
 
-class Product(ProductBase):  # pragma: no cover
+class ProductUpdate(ProductBase):
+    ...
+
+
+class Product(ProductBase):
     id: int
     taken: bool = False
     taken_at: datetime = None
@@ -21,18 +25,18 @@ class Product(ProductBase):  # pragma: no cover
         orm_mode = True
 
 
-class OrderBase(BaseModel):  # pragma: no cover
+class OrderBase(BaseModel):
     mod_id: str
     mod_display_name: str
     owner_display_name: str
     requested_at: datetime
 
 
-class OrderCreation(OrderBase):  # pragma: no cover
+class OrderCreation(OrderBase):
     product_id: int
 
 
-class Order(OrderBase):  # pragma: no cover
+class Order(OrderBase):
     id: int
     product: Product
 
