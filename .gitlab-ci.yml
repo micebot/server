@@ -11,5 +11,5 @@ cache:
     - requirements.txt
 
 include:
-  - local: .gitlab/ci/unit-tests.gitlab-ci.yml
+  - local: .gitlab/ci/test.gitlab-ci.yml
   - local: .gitlab/ci/deploy.gitlab-ci.yml
