@@ -1,46 +1,15 @@
-variables:
-  HEROKU_RUNTIME: "python-3.8.3"
-  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
-
-cache:
-  key: "${CI_JOB_NAME}"
-  paths:
-    - .cache/pip
-    - .venv
-    - requirements.txt
-
 stages:
-  - quality
-  - tests
+  - testing
   - deploy
 
-# Jobs templates ------------------
+variables:
+  HEROKU_RUNTIME: "python-3.8.2"
 
-.install-deps-template: &install-deps
-  before_script:
-    - pip install poetry
-    - poetry --version
-    - poetry config settings.virtualenvs.in-project true
-    - poetry install -vv
+cache:
+  key: "$CI_COMMIT_SHA"
+  paths:
+    - requirements.txt
 
-.quality-template: &quality
-  <<: *install-deps
-  image: python:3.8
-  stage: quality
-
-.test-template: &test
-  <<: *install-deps
-  image: python:3.8
-  stage: tests
-  coverage: '/TOTAL.*\s(\d+\.\d+\%)/'
-
-.deploy-template: &deploy
-  image: ruby:2.7
-  stage: deploy
-
-# Imports ------------------
-
- include:
-   - local: .gitlab/ci/quality.gitlab-ci.yml
-   - local: .gitlab/ci/test.gitlab-ci.yml
-   - local: .gitlab/ci/deploy.gitlab-ci.yml
+include:
+  - local: .gitlab/ci/unit-tests.gitlab-ci.yml
+  - local: .gitlab/ci/deploy.gitlab-ci.yml

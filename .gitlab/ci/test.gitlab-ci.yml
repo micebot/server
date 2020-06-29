@@ -1,12 +1,32 @@
+.install-deps-template: &install-deps
+  before_script:
+    - pip install poetry && poetry install
+    - poetry --version
+    - poetry config settings.virtualenvs.in-project true
+    - poetry install -vv
+
+.test-template: &test
+  <<: *install-deps
+  stage: testing
+  image: python:3.8
+
+check docstyle:
+  <<: *test
+  script: poetry run pydocstyle server
+  allow_failure: true
+
+  rules:
+    - when: always
+
 unit tests:
   <<: *test
-
   script:
+    - poetry export -f requirements.txt > requirements.txt
+    - poetry run pylama server
     - poetry run coverage run -m unittest discover -s test/unit -v
     - poetry run coverage report
 
-  dependencies:
-    - check codestyle
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
   rules:
-    - when: on_success
+    - when: always

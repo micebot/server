@@ -1,8 +1,0 @@
-check codestyle:
-  <<: *quality
-  script: poetry run pylama server
-
-check docstyle:
-  <<: *quality
-  script: poetry run pydocstyle server
-  allow_failure: true
