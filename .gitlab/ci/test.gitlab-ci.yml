@@ -1,23 +1,8 @@
-.install-deps-template: &install-deps
-  before_script:
-    - pip install poetry && poetry install
-
-.test-template: &test
-  <<: *install-deps
+unit tests:
   stage: testing
   image: python:3.8
-
-check docstyle:
-  <<: *test
-  script: poetry run pydocstyle server
-  allow_failure: true
-
-  rules:
-    - when: always
-
-unit tests:
-  <<: *test
   script:
+    - pip install poetry && poetry install
     - poetry export -f requirements.txt > requirements.txt
     - poetry run pylama server
     - poetry run coverage run -m unittest discover -s test/unit -v
