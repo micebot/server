@@ -47,16 +47,48 @@ def get_orders(
 
 
 def get_order_by_id(db: Session, order_id: int) -> Optional[entities.Order]:
+    """
+    Get the order by id.
+
+    Args:
+        - db: the database session.
+        - order_id: the order id.
+
+    Returns:
+        - None, if there is non order with the id provided.
+        Otherwise the order object is returned.
+    """
     return db.query(entities.Order).filter_by(id=order_id).first()
 
 
 def get_order_by_product_id(
     db: Session, product_id: int
 ) -> Optional[entities.Order]:
+    """
+    Get the order by the product id.
+
+    Args:
+        - db: the database session.
+        - product_id: the product id.
+
+    Returns:
+        - None, if there is non order with the product id provided.
+        Otherwise the order object is returned.
+    """
     return db.query(entities.Order).filter_by(product_id=product_id).first()
 
 
 def create_order(db: Session, order: schemas.OrderCreation) -> entities.Order:
+    """
+    Persit a new order.
+
+    Args:
+        - db: the database session.
+        - order: the order schema.
+
+    Returns:
+        - the order object with generated values.
+    """
     db_order = entities.Order(**order.dict())
     db.add(db_order)
     db.commit()
@@ -65,6 +97,16 @@ def create_order(db: Session, order: schemas.OrderCreation) -> entities.Order:
 
 
 def take_order(db: Session, order: entities.Order) -> entities.Order:
+    """
+    Mark the product of an order as taken.
+
+    Args:
+        - db: the database session.
+        - order: the order to take the product.
+
+    Returns:
+        - the updated order.
+    """
     order.product.taken = True
     order.product.taken_at = datetime.utcnow()
     db.commit()
