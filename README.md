@@ -33,11 +33,11 @@ a integração com outras aplicações da organização [**@micebot**][13]: util
 | **Master** | [![pipeline status][5]][6] | [![coverage report][7]][8] |
 
 [1]:https://gitlab.com/micebot/server-ci/badges/development/pipeline.svg
-[2]:https://gitlab.com/micebot/server-ci/-/commits/development
+[2]:https://gitlab.com/micebot/server-ci/-/pipelines?page=1&scope=all&ref=development
 [3]:https://gitlab.com/micebot/server-ci/badges/development/coverage.svg
 [4]:https://gitlab.com/micebot/server-ci/-/commits/development
 [5]:https://gitlab.com/micebot/server-ci/badges/master/pipeline.svg
-[6]:https://gitlab.com/micebot/server-ci/-/commits/master
+[6]:https://gitlab.com/micebot/server-ci/-/pipelines?page=1&scope=all&ref=master
 [7]:https://gitlab.com/micebot/server-ci/badges/master/coverage.svg
 [8]:https://gitlab.com/micebot/server-ci/-/commits/master
 [9]:https://github.com/codigofalado/desafio333
