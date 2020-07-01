@@ -1,10 +1,13 @@
-from pydantic import BaseSettings  # pragma: no cover
+from typing import List
+
+from pydantic import BaseSettings
 
 
-class Environment(BaseSettings):  # pragma: no cover
+class Environment(BaseSettings):
     database_url: str = "sqlite:///local.db"
     production: bool = False
     secret_key: str = "secret-key"
+    token_algorithm: str = "HS256"
 
 
-env: Environment = Environment()  # pragma: no cover
+env: Environment = Environment()
