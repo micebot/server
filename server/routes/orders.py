@@ -68,6 +68,11 @@ def take_order(
     order_id: int, db: Session = Depends(open_session),
 ):
     if order := repo.get_order_by_id(db=db, order_id=order_id):
+        if order.product.taken:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="The product for this order is already taken.",
+            )
         return repo.take_order(db=db, order=order)
 
     raise HTTPException(
