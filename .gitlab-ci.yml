@@ -13,8 +13,27 @@ cache:
     - runtime.txt
     - requirements.txt
 
+
+.install-deps-template: &install-deps
+  before_script:
+    - pip install poetry
+    - poetry --version
+    - poetry install
+
+
+.quality-template: &quality
+  <<: *install-deps
+  image: python:3.8
+  stage: quality
+
+
+.test-template: &test
+  <<: *install-deps
+  stage: testing
+  image: python:3.8
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
 include:
-  - local: .gitlab/ci/templates.gitlab-ci.yml
   - local: .gitlab/ci/quality.gitlab-ci.yml
   - local: .gitlab/ci/test.gitlab-ci.yml
   - local: .gitlab/ci/deploy.gitlab-ci.yml
