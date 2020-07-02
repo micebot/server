@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from server.db import open_session
 from server.db.repo import orders as repo
+from server.db.repo import products as product_repo
 from server.models import schemas
 
 router = APIRouter()
@@ -41,41 +42,27 @@ def get_orders(
 
 
 @router.post(
-    "/",
-    summary="Register a new order.",
+    "/{code}",
+    summary="Generate a new order for a product.",
     response_model=schemas.Order,
     status_code=status.HTTP_201_CREATED,
 )
 def create_order(
-    order: schemas.OrderCreation, db: Session = Depends(open_session)
+    code: str,
+    order: schemas.OrderCreation,
+    db: Session = Depends(open_session),
 ):
-    if repo.get_order_by_product_id(db=db, product_id=order.product_id):
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="The product id is already in use by another order.",
-        )
-
-    return repo.create_order(db=db, order=order)
-
-
-@router.put(
-    "/take/{order_id}",
-    summary="Update an order to mark as taken.",
-    response_model=schemas.Order,
-    status_code=status.HTTP_200_OK,
-)
-def take_order(
-    order_id: int, db: Session = Depends(open_session),
-):
-    if order := repo.get_order_by_id(db=db, order_id=order_id):
-        if order.product.taken:
+    if product := product_repo.get_product_by_code(db=db, code=code):
+        if product.taken:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
-                detail="The product for this order is already taken.",
+                detail="The product code is already taken.",
             )
-        return repo.take_order(db=db, order=order)
+        return repo.create_order_for_product(
+            db=db, product=product, order=order
+        )
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail="No order found for the id specified.",
+        detail="No product found for the code provided.",
     )

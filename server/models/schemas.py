@@ -32,7 +32,7 @@ class OrderBase(BaseModel):
 
 
 class OrderCreation(OrderBase):
-    product_id: int
+    ...
 
 
 class Order(OrderBase):

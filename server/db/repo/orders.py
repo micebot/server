@@ -39,75 +39,57 @@ def get_orders(
         query = query.filter_by(owner_display_name=owner)
 
     return (
-        query.filter(entities.Product.taken == taken)
+        query.join(entities.Product)
+        .filter(entities.Product.taken == taken)
         .offset(skip)
         .limit(limit)
         .all()
     )
 
 
-def get_order_by_id(db: Session, order_id: int) -> Optional[entities.Order]:
-    """
-    Get the order by id.
-
-    Args:
-        - db: the database session.
-        - order_id: the order id.
-
-    Returns:
-        - None, if there is non order with the id provided.
-        Otherwise the order object is returned.
-    """
-    return db.query(entities.Order).filter_by(id=order_id).first()
-
-
-def get_order_by_product_id(
-    db: Session, product_id: int
+def get_order_by_product_code(
+    db: Session, code: str
 ) -> Optional[entities.Order]:
     """
-    Get the order by the product id.
+    Get an order by the product code.
 
     Args:
         - db: the database session.
-        - product_id: the product id.
+        - code: the product code.
 
     Returns:
-        - None, if there is non order with the product id provided.
-        Otherwise the order object is returned.
+        - None if no product was found fot the provided code, otherwise
+        the order containing the product is returned.
     """
-    return db.query(entities.Order).filter_by(product_id=product_id).first()
+    return (
+        db.query(entities.Order)
+        .join(entities.Product)
+        .filter(entities.Product.code == code)
+        .first()
+    )
 
 
-def create_order(db: Session, order: schemas.OrderCreation) -> entities.Order:
+def create_order_for_product(
+    db: Session, product: entities.Product, order: schemas.OrderCreation
+) -> entities.Order:
     """
-    Persit a new order.
+    Create a new order and mark the product as taken.
 
     Args:
         - db: the database session.
+        - product: the product to be used on order.
         - order: the order schema.
 
     Returns:
-        - the order object with generated values.
+        - the order created with product marked as taken.
     """
+
+    product.taken = True
+    product.taken_at = datetime.utcnow()
+
     db_order = entities.Order(**order.dict())
+    db_order.product = product
     db.add(db_order)
     db.commit()
     db.refresh(db_order)
     return db_order
-
-
-def take_order(db: Session, order: entities.Order) -> entities.Order:
-    """
-    Mark the product of an order as taken.
-
-    Args:
-        - db: the database session.
-        - order: the order to take the product.
-
-    Returns:
-        - the updated order.
-    """
-    order.product.taken = True
-    order.product.taken_at = datetime.utcnow()
-    db.commit()
-    return order
