@@ -27,7 +27,7 @@ cache:
   before_script:
     - pip install poetry
     - poetry --version
-    - poetry config virtualenvs.cache-dir .cache
+    - poetry config cache-dir .cache/poetry
     - poetry config virtualenvs.in-project true
     - poetry install
 
