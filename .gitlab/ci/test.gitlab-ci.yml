@@ -1,4 +1,4 @@
-unit tests:
+unit tests & linter:
   stage: testing
   image: python:3.8
   script:

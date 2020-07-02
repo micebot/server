@@ -3,9 +3,9 @@ from typing import List, Dict
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from server.db import open_session
 from server.db.repo import products as repo
 from server.models import schemas
+from server.models.oauth2 import auth
 
 router = APIRouter()
 
@@ -20,7 +20,7 @@ def get_products(
     skip: int = 0,
     limit: int = 50,
     taken: bool = False,
-    db: Session = Depends(open_session),
+    db: Session = Depends(auth),
 ):
     if entities := repo.get_products(
         db=db, skip=skip, limit=limit, taken=taken
@@ -40,7 +40,7 @@ def get_products(
     status_code=status.HTTP_201_CREATED,
 )
 def create_product(
-    product: schemas.ProductCreation, db: Session = Depends(open_session)
+    product: schemas.ProductCreation, db: Session = Depends(auth)
 ):
     if repo.get_product_by_code(db=db, code=product.code):
         raise HTTPException(
@@ -58,9 +58,7 @@ def create_product(
     status_code=status.HTTP_200_OK,
 )
 def update_product(
-    code: str,
-    product: schemas.ProductUpdate,
-    db: Session = Depends(open_session),
+    code: str, product: schemas.ProductUpdate, db: Session = Depends(auth)
 ):
     if db_product := repo.get_product_by_code(db=db, code=code):
         if repo.get_product_by_code(db=db, code=product.code):
@@ -84,9 +82,7 @@ def update_product(
     response_model=Dict[str, bool],
     status_code=status.HTTP_200_OK,
 )
-def delete_product(
-    code: str, db: Session = Depends(open_session),
-):
+def delete_product(code: str, db: Session = Depends(auth)):
     if product := repo.get_product_by_code(db=db, code=code):
         if product.taken:
             raise HTTPException(
@@ -94,7 +90,7 @@ def delete_product(
                 detail="Cannot delete products already taken.",
             )
         repo.delete_product(db=db, product=product)
-        return {'deleted': True}
+        return {"deleted": True}
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,

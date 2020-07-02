@@ -1,6 +1,6 @@
 import factory
 
-from server.db.entities import Product, Order
+from server.db.entities import Product, Order, Application
 
 
 class ProductFactory(factory.Factory):
@@ -33,3 +33,12 @@ class OrderFactory(factory.Factory):
     )
     product_id = factory.Faker("pyint")
     product = factory.SubFactory(ProductFactory, __sequence=1)
+
+
+class ApplicationFactory(factory.Factory):
+    class Meta:
+        model = Application
+
+    id = factory.Sequence(lambda n: n)
+    username = factory.Faker("user_name")
+    pass_hash = factory.Faker("password")

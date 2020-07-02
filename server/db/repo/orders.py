@@ -58,7 +58,7 @@ def get_order_by_product_code(
         - code: the product code.
 
     Returns:
-        - None if no product was found fot the provided code, otherwise
+        - None if no product was found for the provided code, otherwise
         the order containing the product is returned.
     """
     return (

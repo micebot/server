@@ -9,7 +9,7 @@ deploy to heroku:
     - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
 
   dependencies:
-    - unit tests
+    - unit tests & linter
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
