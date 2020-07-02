@@ -7,7 +7,7 @@ from faker import Faker
 from fastapi.testclient import TestClient
 
 from server import app
-from server.db import open_session
+from server.models.oauth2 import auth
 
 
 class Test(TestCase):
@@ -25,7 +25,7 @@ class TestRoute(Test):
 
     def setUp(self) -> NoReturn:
         self.db = MagicMock()
-        self.app.dependency_overrides[open_session] = lambda: self.db
+        self.app.dependency_overrides[auth] = lambda: self.db
 
     def tearDown(self) -> NoReturn:
         self.app.dependency_overrides = {}
