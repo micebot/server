@@ -1,14 +1,12 @@
-unit tests & linter:
-  stage: testing
-  image: python:3.8
+unit tests:
+  <<: *test
   script:
-    - pip install poetry && poetry install
-    - poetry export -f requirements.txt > requirements.txt
-    - poetry run pylama server
     - poetry run coverage run -m unittest discover -s test/unit -v
     - poetry run coverage report
 
-  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+  dependencies:
+    - codestyle
+    - black
 
   rules:
-    - when: always
+    - when: on_success

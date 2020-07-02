@@ -1,0 +1,12 @@
+export dependencies:
+  <<: *install-deps
+
+  image: python:3.8
+  stage: build
+
+  script:
+    - echo "$HEROKU_RUNTIME" > runtime.txt
+    - poetry export -f requirements.txt > requirements.txt
+
+  rules:
+    - when: on_success

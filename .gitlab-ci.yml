@@ -1,5 +1,7 @@
 stages:
+  - quality
   - testing
+  - build
   - deploy
 
 variables:
@@ -8,8 +10,11 @@ variables:
 cache:
   key: "$CI_COMMIT_SHA"
   paths:
+    - runtime.txt
     - requirements.txt
 
 include:
+  - local: .gitlab/ci/templates.gitlab-ci.yml
+  - local: .gitlab/ci/quality.gitlab-ci.yml
   - local: .gitlab/ci/test.gitlab-ci.yml
   - local: .gitlab/ci/deploy.gitlab-ci.yml
