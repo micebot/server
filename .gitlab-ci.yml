@@ -1,44 +1,69 @@
 stages:
+  - prepare
   - quality
   - testing
   - pre-deploy
   - deploy
 
 variables:
-  HEROKU_RUNTIME: "python-3.8.2"
+  HEROKU_RUNTIME: "python-3.8.3"
+  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
 
 cache:
   key: "$CI_COMMIT_SHA"
   paths:
+    - .cache/pip
+    - .venv
     - runtime.txt
     - requirements.txt
 
+# Templates ----------
 
-.install-deps-template: &install-deps
-  before_script:
-    - pip install poetry
-    - poetry --version
-    - poetry install
+.python: &py
+  image: python:3.8
 
 
 .quality-template: &quality
-  <<: *install-deps
-  image: python:3.8
   stage: quality
+  <<: *py
+
+  cache: {}
+
+  rules:
+    - when: always
 
 
 .test-template: &test
-  <<: *install-deps
   stage: testing
-  image: python:3.8
+  <<: *py
+
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
+  cache: {}
+
+  rules:
+    - when: on_success
+
+
+# Prepare Jobs ----------
+
+install deps:
+  stage: prepare
+  <<: *py
+  script:
+    - pip install poetry
+    - poetry --version
+    - poetry config cache-dir .cache
+    - poetry config virtualenvs.in-project = true
+    - poetry install
+
+
+# Quality Jobs ----------
 
 codestyle:
   <<: *quality
   script:
     - poetry run pylama server
-  rules:
-    - when: always
 
 
 docstyle:
@@ -54,9 +79,9 @@ black:
   <<: *quality
   script:
     - poetry run black -l 79 --check server
-  rules:
-    - when: always
 
+
+# Testing Jobs ----------
 
 unit tests:
   <<: *test
@@ -66,17 +91,18 @@ unit tests:
 
   dependencies:
     - codestyle
+    - docstyle
     - black
 
-  rules:
-    - when: on_success
 
+# Prepare for deploy Jobs ----------
 
-export dependencies:
-  <<: *install-deps
-
-  image: python:3.8
+requirements:
+  <<: *py
   stage: pre-deploy
+
+  dependencies:
+    - unit tests
 
   script:
     - echo "$HEROKU_RUNTIME" > runtime.txt
@@ -86,6 +112,8 @@ export dependencies:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: on_success
 
+
+# Deploy Jobs
 
 deploy to heroku:
 
@@ -97,7 +125,7 @@ deploy to heroku:
     - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
 
   dependencies:
-    - export dependencies
+    - requirements
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'

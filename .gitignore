@@ -14,3 +14,8 @@ test/unit/coverage
 
 # Local databases (development)
 *.db
+
+# Dependency Manager
+.venv
+.cache
+requirements.txt
