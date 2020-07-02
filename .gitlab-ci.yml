@@ -81,7 +81,8 @@ export dependencies:
     - poetry export -f requirements.txt > requirements.txt
 
   rules:
-    - when: on_success
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
 
 
 deploy to heroku:
