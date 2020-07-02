@@ -49,11 +49,11 @@ class Application(Entity):
     def password(self):
         return self.pass_hash
 
-    @password.setter
-    def password(self, plain_password: str) -> NoReturn:  # pragma: no cover
+    @password.setter  # noqa
+    def password(self, plain_password: str) -> NoReturn:
         self.pass_hash = pw_context.hash(plain_password)
 
-    def check_password(self, plain_password: str) -> bool:  # pragma: no cover
+    def check_password(self, plain_password: str) -> bool:
         return pw_context.verify(plain_password, self.pass_hash)
 
     def __repr__(self):  # pragma: no cover
