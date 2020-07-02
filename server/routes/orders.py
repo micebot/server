@@ -48,9 +48,7 @@ def get_orders(
     status_code=status.HTTP_201_CREATED,
 )
 def create_order(
-    code: str,
-    order: schemas.OrderCreation,
-    db: Session = Depends(auth),
+    code: str, order: schemas.OrderCreation, db: Session = Depends(auth),
 ):
     if product := product_repo.get_product_by_code(db=db, code=code):
         if product.taken:
