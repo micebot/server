@@ -1,7 +1,7 @@
 stages:
   - quality
   - testing
-  - build
+  - pre-deploy
   - deploy
 
 variables:
@@ -33,7 +33,69 @@ cache:
   image: python:3.8
   coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
 
-include:
-  - local: .gitlab/ci/quality.gitlab-ci.yml
-  - local: .gitlab/ci/test.gitlab-ci.yml
-  - local: .gitlab/ci/deploy.gitlab-ci.yml
+codestyle:
+  <<: *quality
+  script:
+    - poetry run pylama server
+  rules:
+    - when: always
+
+
+docstyle:
+  <<: *quality
+  script:
+    - poetry run pydocstyle server
+  allow_failure: true
+
+
+black:
+  <<: *quality
+  script:
+    - poetry run black -l 79 --check server
+  rules:
+    - when: always
+
+
+unit tests:
+  <<: *test
+  script:
+    - poetry run coverage run -m unittest discover -s test/unit -v
+    - poetry run coverage report
+
+  dependencies:
+    - codestyle
+    - black
+
+  rules:
+    - when: on_success
+
+
+export dependencies:
+  <<: *install-deps
+
+  image: python:3.8
+  stage: pre-deploy
+
+  script:
+    - echo "$HEROKU_RUNTIME" > runtime.txt
+    - poetry export -f requirements.txt > requirements.txt
+
+  rules:
+    - when: on_success
+
+
+deploy to heroku:
+
+  stage: deploy
+  image: ruby:2.7
+
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
+
+  dependencies:
+    - export dependencies
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
