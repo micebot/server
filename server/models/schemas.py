@@ -29,15 +29,15 @@ class OrderBase(BaseModel):
     mod_id: str
     mod_display_name: str
     owner_display_name: str
-    requested_at: datetime
 
 
 class OrderCreation(OrderBase):
-    product_id: int
+    ...
 
 
 class Order(OrderBase):
     id: int
+    requested_at: datetime
     product: Product
 
     class Config:

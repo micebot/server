@@ -23,7 +23,7 @@ class Product(Entity):
         return str(self.__dict__)
 
 
-class Order(Entity):  # pragma: no cover
+class Order(Entity):
     __tablename__ = "order"
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
@@ -32,5 +32,5 @@ class Order(Entity):  # pragma: no cover
     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
     product = relationship("Product")
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return str(self.__dict__)
