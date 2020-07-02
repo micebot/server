@@ -25,6 +25,7 @@ def get_orders(
     taken: bool = False,
     db: Session = Depends(auth),
 ):
+    """Get all the orders."""
     if entities := repo.get_orders(
         db=db,
         skip=skip,
@@ -50,6 +51,7 @@ def get_orders(
 def create_order(
     code: str, order: schemas.OrderCreation, db: Session = Depends(auth),
 ):
+    """Generate a new order for a product."""
     if product := product_repo.get_product_by_code(db=db, code=code):
         if product.taken:
             raise HTTPException(

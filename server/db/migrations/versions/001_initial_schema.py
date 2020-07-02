@@ -16,6 +16,7 @@ depends_on = None
 
 
 def upgrade():
+    """Create the initial database schema."""
     op.create_table(
         "product",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -42,6 +43,7 @@ def upgrade():
 
 
 def downgrade():
+    """Drop all tables and indexes from database."""
     op.drop_index(op.f("ix_order_id"), table_name="order")
     op.drop_table("order")
     op.drop_index(op.f("ix_product_id"), table_name="product")

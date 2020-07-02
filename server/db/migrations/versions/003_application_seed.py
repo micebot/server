@@ -27,6 +27,7 @@ t_app = sa.table(
 
 
 def upgrade():
+    """Added the initial applications user/pass."""
     ps_app = Application(
         username=environ.get("PS_USER") if env.production else "ps_user"
     )
@@ -47,4 +48,5 @@ def upgrade():
 
 
 def downgrade():
+    """Remove all registers from application table."""
     op.execute(t_app.delete())

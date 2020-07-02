@@ -18,6 +18,7 @@ async def authenticate(
     form: security.OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(open_session),
 ):
+    """Authenticate the application to consume our API."""
     app = auth_application(db=db, uname=form.username, password=form.password)
 
     if not app:

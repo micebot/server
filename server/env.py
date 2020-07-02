@@ -2,6 +2,16 @@ from pydantic import BaseSettings
 
 
 class Environment(BaseSettings):
+    """
+    This is (some of) the environment variables used by the app.
+
+    In production, we specify different values for this variables
+    than what you are seeing here. These "hardcoded" values are
+    used only in a development environment. So you don't have to
+    worry about specifying these values in your environment.
+
+    """
+
     database_url: str = "sqlite:///local.db"
     production: bool = False
     secret_key: str = "secret-key"

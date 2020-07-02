@@ -44,8 +44,10 @@ codestyle:
 docstyle:
   <<: *quality
   script:
-    - poetry run pydocstyle server
-  allow_failure: true
+    # D101: Missing docstring in public class.
+    # D102: Missing docstring in public method.
+    # D103: Missing docstring in public function.
+    - poetry run pydocstyle --select=D101,D102,D103 server
 
 
 black:

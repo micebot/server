@@ -12,11 +12,24 @@ Base = declarative_base()
 
 
 class Entity(Base):
+    """
+    Represents a base entity.
+
+    This adds a non nullable integer as primary key for models/entities
+    that inherits from `Entity`. A index is also created too.
+    """
+
     __abstract__ = True
     id = Column(Integer, nullable=False, primary_key=True, index=True)
 
 
 class Product(Entity):
+    """
+    Represents a product entity.
+
+    Contains the code to be redeemed.
+    """
+
     __tablename__ = "product"
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
@@ -28,6 +41,14 @@ class Product(Entity):
 
 
 class Order(Entity):
+    """
+    Represents an order entity.
+
+    Contains information from a code redemption request.
+    Consider the information of the moderator who requested the code, the user
+    who received it, general date/time information, and the product identifier.
+    """
+
     __tablename__ = "order"
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
@@ -41,19 +62,38 @@ class Order(Entity):
 
 
 class Application(Entity):
+    """
+    Represents an application entity.
+
+    We use it to define what applications can consume our API.
+    """
+
     __tablename__ = "application"
     username = Column(String, nullable=False, unique=True)
     pass_hash = Column(String, nullable=False)
 
     @hybrid_property
     def password(self):
+        """Retrieve the hashed password."""
         return self.pass_hash
 
     @password.setter  # noqa
     def password(self, plain_password: str) -> NoReturn:
+        """
+        Hash the password.
+
+        Args:
+            - plain_password: the plain password to be hashed.
+        """
         self.pass_hash = pw_context.hash(plain_password)
 
     def check_password(self, plain_password: str) -> bool:
+        """
+        Compare the hashed password with the plain one.
+
+        Args:
+            - plain_password: the plain password to be compared with the hash.
+        """
         return pw_context.verify(plain_password, self.pass_hash)
 
     def __repr__(self):  # pragma: no cover

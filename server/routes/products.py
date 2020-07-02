@@ -22,6 +22,7 @@ def get_products(
     taken: bool = False,
     db: Session = Depends(auth),
 ):
+    """Get all the products."""
     if entities := repo.get_products(
         db=db, skip=skip, limit=limit, taken=taken
     ):
@@ -42,6 +43,7 @@ def get_products(
 def create_product(
     product: schemas.ProductCreation, db: Session = Depends(auth)
 ):
+    """Register a new product."""
     if repo.get_product_by_code(db=db, code=product.code):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -60,6 +62,7 @@ def create_product(
 def update_product(
     code: str, product: schemas.ProductUpdate, db: Session = Depends(auth)
 ):
+    """Update an existing product."""
     if db_product := repo.get_product_by_code(db=db, code=code):
         if repo.get_product_by_code(db=db, code=product.code):
             raise HTTPException(
@@ -83,6 +86,7 @@ def update_product(
     status_code=status.HTTP_200_OK,
 )
 def delete_product(code: str, db: Session = Depends(auth)):
+    """Delete a registed product."""
     if product := repo.get_product_by_code(db=db, code=code):
         if product.taken:
             raise HTTPException(

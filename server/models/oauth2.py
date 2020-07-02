@@ -20,6 +20,7 @@ auth_exception = HTTPException(
 async def auth(
     token: str = Depends(oauth_schema), db: Session = Depends(open_session)
 ):
+    """Authorize the application to use our API."""
     try:
         uname = decode(
             token, env.secret_key, algorithms=[env.token_algorithm]
@@ -41,6 +42,16 @@ async def auth(
 def create_access_token(
     *, data: Dict, expires_delta: timedelta = timedelta(minutes=20)
 ):
+    """
+    Create an access token.
+
+    Args:
+        - data: the token contents.
+        - expires_delta: the expiration time for the token.
+
+    Returns:
+        - the encoded token.
+    """
     data_to_encode = data.copy()
     data_to_encode.update({"exp": datetime.utcnow() + expires_delta})
     return encode(

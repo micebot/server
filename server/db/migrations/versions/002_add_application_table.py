@@ -16,6 +16,7 @@ depends_on = None
 
 
 def upgrade():
+    """Add a new table for register applications."""
     op.create_table(
         "application",
         sa.Column("id", sa.Integer(), nullable=False),
@@ -30,5 +31,6 @@ def upgrade():
 
 
 def downgrade():
+    """Drop the application table and the indexes associated."""
     op.drop_index(op.f("ix_application_id"), table_name="application")
     op.drop_table("application")
