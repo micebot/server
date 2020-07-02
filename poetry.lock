@@ -479,6 +479,17 @@ python-versions = "*"
 version = "1.0.4"
 
 [[package]]
+category = "main"
+description = "A streaming multipart parser for Python"
+name = "python-multipart"
+optional = false
+python-versions = "*"
+version = "0.0.5"
+
+[package.dependencies]
+six = ">=1.4.0"
+
+[[package]]
 category = "dev"
 description = "Python HTTP for Humans."
 name = "requests"
@@ -626,7 +637,7 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [metadata]
-content-hash = "a78be86d9413478ffb6b9116f17cd97b987cbd661fecac9f5cb70f522deb11cf"
+content-hash = "c7b801567ad84cbf9906845bd6b0e1c55b81fd8437b0f1c65afc9d24771a8da2"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -936,6 +947,9 @@ python-editor = [
     {file = "python_editor-1.0.4-py2.7.egg", hash = "sha256:ea87e17f6ec459e780e4221f295411462e0d0810858e055fc514684350a2f522"},
     {file = "python_editor-1.0.4-py3-none-any.whl", hash = "sha256:1bf6e860a8ad52a14c3ee1252d5dc25b2030618ed80c022598f00176adc8367d"},
     {file = "python_editor-1.0.4-py3.5.egg", hash = "sha256:c3da2053dbab6b29c94e43c486ff67206eafbe7eb52dbec7390b5e2fb05aac77"},
+]
+python-multipart = [
+    {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 requests = [
     {file = "requests-2.24.0-py2.py3-none-any.whl", hash = "sha256:fe75cc94a9443b9246fc7049224f75604b113c36acb93f87b80ed42c44cbb898"},
