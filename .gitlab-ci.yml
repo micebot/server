@@ -2,12 +2,13 @@ stages:
   - prepare
   - quality
   - testing
-  - pre-deploy
   - deploy
+
 
 variables:
   HEROKU_RUNTIME: "python-3.8.3"
   PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
+
 
 cache:
   key: "$CI_COMMIT_SHA"
@@ -17,10 +18,18 @@ cache:
     - runtime.txt
     - requirements.txt
 
+
 # Templates ----------
+
 
 .python: &py
   image: python:3.8
+  before_script:
+    - pip install poetry
+    - poetry --version
+    - poetry config virtualenvs.cache-dir .cache
+    - poetry config virtualenvs.in-project true
+    - poetry install
 
 
 .quality-template: &quality
@@ -57,18 +66,17 @@ cache:
 
 # Prepare Jobs ----------
 
-install deps:
+
+papare:
   stage: prepare
   <<: *py
   script:
-    - pip install poetry
-    - poetry --version
-    - poetry config cache-dir .cache
-    - poetry config virtualenvs.in-project true
-    - poetry install
+    - echo "$HEROKU_RUNTIME" > runtime.txt
+    - poetry export -f requirements.txt > requirements.txt
 
 
 # Quality Jobs ----------
+
 
 codestyle:
   <<: *quality
@@ -93,6 +101,7 @@ black:
 
 # Testing Jobs ----------
 
+
 unit tests:
   <<: *test
   script:
@@ -105,32 +114,8 @@ unit tests:
     - black
 
 
-# Prepare for deploy Jobs ----------
-
-requirements:
-  <<: *py
-  stage: pre-deploy
-
-  dependencies:
-    - unit tests
-
-  cache:
-    key: "$CI_COMMIT_SHA"
-    paths:
-      - .cache/pip
-      - .venv
-    policy: pull
-
-  script:
-    - echo "$HEROKU_RUNTIME" > runtime.txt
-    - poetry export -f requirements.txt > requirements.txt
-
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      when: on_success
-
-
 # Deploy Jobs
+
 
 deploy to heroku:
 
@@ -142,7 +127,7 @@ deploy to heroku:
     - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
 
   dependencies:
-    - requirements
+    - unit tests
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
