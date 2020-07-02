@@ -3,10 +3,10 @@ from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from server.db import open_session
 from server.db.repo import orders as repo
 from server.db.repo import products as product_repo
 from server.models import schemas
+from server.models.oauth2 import auth
 
 router = APIRouter()
 
@@ -23,7 +23,7 @@ def get_orders(
     moderator: str = None,
     owner: str = None,
     taken: bool = False,
-    db: Session = Depends(open_session),
+    db: Session = Depends(auth),
 ):
     if entities := repo.get_orders(
         db=db,
@@ -50,7 +50,7 @@ def get_orders(
 def create_order(
     code: str,
     order: schemas.OrderCreation,
-    db: Session = Depends(open_session),
+    db: Session = Depends(auth),
 ):
     if product := product_repo.get_product_by_code(db=db, code=code):
         if product.taken:
