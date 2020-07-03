@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, UUID4
 
 
 class ProductBase(BaseModel):
@@ -25,7 +25,7 @@ class ProductUpdate(ProductBase):
 class Product(ProductBase):
     """The product schema exposed by the API."""
 
-    uuid: str
+    uuid: UUID4
     taken: bool = False
     taken_at: datetime = None
 
@@ -50,7 +50,7 @@ class OrderCreation(OrderBase):
 class Order(OrderBase):
     """The order schema exposed by the API."""
 
-    uuid: str
+    uuid: UUID4
     requested_at: datetime
     product: Product
 

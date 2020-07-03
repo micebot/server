@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import NoReturn
+from uuid import uuid4
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
@@ -32,7 +33,9 @@ class Product(Entity):
     """
 
     __tablename__ = "product"
-    uuid = Column(UUID(as_uuid=True), nullable=False, unique=True)
+    uuid = Column(
+        UUID(as_uuid=True), nullable=False, unique=True, default=uuid4
+    )
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
     taken = Column(Boolean, nullable=False, default=False)
@@ -52,7 +55,9 @@ class Order(Entity):
     """
 
     __tablename__ = "order"
-    uuid = Column(UUID(as_uuid=True), nullable=False, unique=True)
+    uuid = Column(
+        UUID(as_uuid=True), nullable=False, unique=True, default=uuid4
+    )
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
     owner_display_name = Column(String, nullable=False)
