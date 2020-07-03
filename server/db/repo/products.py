@@ -31,13 +31,27 @@ def get_products(
     )
 
 
+def get_product_by_uuid(db: Session, uuid: str) -> Optional[entities.Product]:
+    """
+    Get a specific product by the code.
+
+    Args:
+        - db: the database session.
+        - uuid: the product unique ID to be used in query.
+
+    Returns:
+        - the product object if it is found, otherwise `None` is returned.
+    """
+    return db.query(entities.Product).filter_by(uuid=uuid).first()
+
+
 def get_product_by_code(db: Session, code: str) -> Optional[entities.Product]:
     """
     Get a specific product by the code.
 
     Args:
         - db: the database session.
-        - code: the product code to be used in query.
+        - uuid: the product unique ID to be used in query.
 
     Returns:
         - the product object if it is found, otherwise `None` is returned.

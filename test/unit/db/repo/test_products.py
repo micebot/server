@@ -3,10 +3,9 @@ from unittest.mock import MagicMock, patch
 from server.db import entities
 from server.db.repo.products import (
     get_products,
-    get_product_by_code,
     create_product,
     update_product,
-    delete_product,
+    delete_product, get_product_by_uuid,
 )
 from server.models import schemas
 from test.unit.factories import ProductFactory
@@ -42,15 +41,15 @@ class TestGetProducts(Test):
         db.query().filter_by().offset().limit().all.assert_called_once()
 
 
-class TestGetProductByCode(Test):
+class TestGetProductByUUID(Test):
     def test_should_execute_query_with_specified_parameters(self):
         db = MagicMock()
-        code = self.faker.md5()
+        uuid = self.faker.uuid4()
 
-        get_product_by_code(db=db, code=code)
+        get_product_by_uuid(db=db, uuid=uuid)
 
         db.query.assert_called_with(entities.Product)
-        db.query().filter_by.assert_called_with(code=code)
+        db.query().filter_by.assert_called_with(uuid=uuid)
         db.query().filter_by().first.assert_called_once()
 
 

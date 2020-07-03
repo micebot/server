@@ -43,16 +43,18 @@ def get_orders(
 
 
 @router.post(
-    "/{code}",
+    "/{product_uuid}",
     summary="Generate a new order for a product.",
     response_model=schemas.Order,
     status_code=status.HTTP_201_CREATED,
 )
 def create_order(
-    code: str, order: schemas.OrderCreation, db: Session = Depends(auth),
+    product_uuid: str,
+    order: schemas.OrderCreation,
+    db: Session = Depends(auth),
 ):
     """Generate a new order for a product."""
-    if product := product_repo.get_product_by_code(db=db, code=code):
+    if product := product_repo.get_product_by_uuid(db=db, uuid=product_uuid):
         if product.taken:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
@@ -64,5 +66,5 @@ def create_order(
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail="No product found for the code provided.",
+        detail="No product found for the uuid provided.",
     )
