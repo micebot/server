@@ -1,0 +1,19 @@
+version: "3.8"
+
+volumes:
+  micebot:
+
+services:
+  db:
+    image: postgres:latest
+    container_name: "micebot_db"
+    environment:
+      - POSTGRES_DB=micebot
+      - POSTGRES_USER=micebot
+      - POSTGRES_PASSWORD=micebot
+      - TZ=GMT
+    volumes:
+      - micebot:/var/lib/postgresql/data
+
+    ports:
+    - 5432:5432

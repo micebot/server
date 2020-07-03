@@ -12,7 +12,7 @@ class Environment(BaseSettings):
 
     """
 
-    database_url: str = "sqlite:///local.db"
+    database_url: str = "postgresql://micebot:micebot@localhost:5432/micebot"
     production: bool = False
     secret_key: str = "secret-key"
     token_algorithm: str = "HS256"
