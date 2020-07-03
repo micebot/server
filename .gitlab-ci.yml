@@ -64,6 +64,17 @@ cache:
     - when: on_success
 
 
+.deploy-template: &deploy
+  stage: deploy
+  image: ruby:2.7
+
+  dependencies:
+    - unit tests
+
+  before_script:
+    - gem install dpl
+
+
 # Prepare Jobs ----------
 
 
@@ -117,18 +128,21 @@ unit tests:
 # Deploy Jobs
 
 
-deploy to heroku:
-
-  stage: deploy
-  image: ruby:2.7
-
+production:
+  <<: *deploy
   script:
-    - gem install dpl
     - dpl --provider=heroku --app=$SERVER_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
-
-  dependencies:
-    - unit tests
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+
+
+staging:
+  <<: *deploy
+  script:
+    - dpl --provider=heroku --app=$SERVER_DEV_HEROKU_APP --api-key=$HEROKU_SECRET_KEY --skip-cleanup=true
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "development"'
       when: on_success
