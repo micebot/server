@@ -25,7 +25,7 @@ class ProductUpdate(ProductBase):
 class Product(ProductBase):
     """The product schema exposed by the API."""
 
-    id: int
+    uuid: str
     taken: bool = False
     taken_at: datetime = None
 
@@ -50,7 +50,7 @@ class OrderCreation(OrderBase):
 class Order(OrderBase):
     """The order schema exposed by the API."""
 
-    id: int
+    uuid: str
     requested_at: datetime
     product: Product
 

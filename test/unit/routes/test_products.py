@@ -56,7 +56,7 @@ class TestGet(TestRoute):
                 {
                     "code": product.code,
                     "summary": product.summary,
-                    "id": product.id,
+                    "uuid": product.uuid,
                     "taken": product.taken,
                     "taken_at": TestHelpers.datetime_to_str(product.taken_at),
                 }
@@ -111,7 +111,7 @@ class TestPost(TestRoute):
             {
                 "code": product.code,
                 "summary": product.summary,
-                "id": product.id,
+                "uuid": product.uuid,
                 "taken": product.taken,
                 "taken_at": TestHelpers.datetime_to_str(product.taken_at),
             },
@@ -123,18 +123,19 @@ class TestPost(TestRoute):
 class TestPut(TestRoute):
     def setUp(self) -> NoReturn:
         super().setUp()
+        self.uuid = self.faker.uuid4()
         self.product = ProductFactory()
 
-    @patch("server.routes.products.repo.update_product")
+    @patch("server.routes.products.repo.get_product_by_uuid")
     @patch("server.routes.products.repo.get_product_by_code")
-    def test_should_return_404_when_no_product_are_found_for_the_code_provided(
-        self, get_product_by_code, update_product
+    @patch("server.routes.products.repo.update_product")
+    def test_should_return_404_when_no_product_are_found_for_the_uuid_provided(
+        self, update_product, get_product_by_code, get_product_by_uuid
     ):
-        code_to_update = self.faker.md5()
-        get_product_by_code.return_value = None
+        get_product_by_uuid.return_value = None
 
         response = self.client.put(
-            f"/products/{code_to_update}",
+            f"/products/{self.uuid}",
             json={"code": self.product.code, "summary": self.product.summary},
         )
 
@@ -143,25 +144,22 @@ class TestPut(TestRoute):
             {"detail": "No product found for the code specified."},
             response.json(),
         )
-        get_product_by_code.assert_called_with(db=self.db, code=code_to_update)
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
         update_product.assert_not_called()
+        get_product_by_code.assert_not_called()
 
-    @patch("server.routes.products.repo.update_product")
+    @patch("server.routes.products.repo.get_product_by_uuid")
     @patch("server.routes.products.repo.get_product_by_code")
-    def test_should_return_409_when_the_new_code_is_already_in_use_by_another_project(  # noqa
-        self, get_product_by_code, update_product
+    @patch("server.routes.products.repo.update_product")
+    def test_should_return_409_when_the_new_code_is_already_in_use_by_another_product(  # noqa
+        self, update_product, get_product_by_code, get_product_by_uuid
     ):
-        code_to_update = self.faker.md5()
-        product_to_update = ProductFactory()
-        product_with_code_already_in_use = ProductFactory()
-
-        get_product_by_code.side_effect = [
-            product_to_update,
-            product_with_code_already_in_use,
-        ]
+        get_product_by_uuid_value = ProductFactory()
+        get_product_by_uuid.return_value = get_product_by_uuid_value
+        get_product_by_code.return_value = ProductFactory()
 
         response = self.client.put(
-            f"/products/{code_to_update}",
+            f"/products/{self.uuid}",
             json={"code": self.product.code, "summary": self.product.summary},
         )
 
@@ -170,116 +168,110 @@ class TestPut(TestRoute):
             {"detail": "The code is already in use by another product."},
             response.json(),
         )
-        get_product_by_code.assert_any_call(db=self.db, code=code_to_update)
-        get_product_by_code.assert_any_call(db=self.db, code=self.product.code)
-        self.assertEqual(2, get_product_by_code.call_count)
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
+        get_product_by_code.assert_called_with(
+            db=self.db, code=self.product.code
+        )
         update_product.assert_not_called()
 
-    @patch("server.routes.products.repo.update_product")
+    @patch("server.routes.products.repo.get_product_by_uuid")
     @patch("server.routes.products.repo.get_product_by_code")
+    @patch("server.routes.products.repo.update_product")
     def test_should_return_200_with_the_updated_product(
-        self, get_product_by_code, update_product
+        self, update_product, get_product_by_code, get_product_by_uuid
     ):
-        code_to_update = self.faker.md5()
-        product_to_update = ProductFactory()
-        updated_product = ProductFactory(
+        get_product_by_uuid_value = ProductFactory()
+        updated_product_value = ProductFactory(
             code=self.product.code, summary=self.product.summary
         )
 
-        get_product_by_code.side_effect = [
-            product_to_update,
-            None,
-        ]
-        update_product.return_value = updated_product
+        get_product_by_uuid.return_value = get_product_by_uuid_value
+        get_product_by_code.return_value = None
+        update_product.return_value = updated_product_value
 
         response = self.client.put(
-            f"/products/{code_to_update}",
+            f"/products/{self.uuid}",
             json={"code": self.product.code, "summary": self.product.summary},
         )
 
         self.assertEqual(200, response.status_code)
         self.assertEqual(
             {
-                "code": updated_product.code,
-                "summary": updated_product.summary,
-                "id": updated_product.id,
-                "taken": updated_product.taken,
+                "code": updated_product_value.code,
+                "summary": updated_product_value.summary,
+                "uuid": updated_product_value.uuid,
+                "taken": updated_product_value.taken,
                 "taken_at": TestHelpers.datetime_to_str(
-                    updated_product.taken_at
+                    updated_product_value.taken_at
                 ),
             },
             response.json(),
         )
 
-        get_product_by_code.assert_any_call(db=self.db, code=code_to_update)
-        get_product_by_code.assert_any_call(db=self.db, code=self.product.code)
-        self.assertEqual(2, get_product_by_code.call_count)
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
+        get_product_by_code.assert_called_with(
+            db=self.db, code=self.product.code
+        )
         update_product.assert_called_with(
             db=self.db,
             product=schemas.ProductUpdate(
                 code=self.product.code, summary=self.product.summary
             ),
-            db_product=product_to_update,
+            db_product=get_product_by_uuid_value,
         )
 
 
 class TestDelete(TestRoute):
     def setUp(self) -> NoReturn:
         super().setUp()
-        self.code_to_delete = self.faker.md5()
+        self.uuid = self.faker.uuid4()
 
     @patch("server.routes.products.repo.delete_product")
-    @patch("server.routes.products.repo.get_product_by_code")
-    def test_should_return_404_when_no_product_are_found_for_the_code_provided(
-        self, get_product_by_code, delete_product
+    @patch("server.routes.products.repo.get_product_by_uuid")
+    def test_should_return_404_when_no_product_are_found_for_the_uuid_provided(
+        self, get_product_by_uuid, delete_product
     ):
-        get_product_by_code.return_value = None
+        get_product_by_uuid.return_value = None
 
-        response = self.client.delete(f"/products/{self.code_to_delete}")
+        response = self.client.delete(f"/products/{self.uuid}")
 
         self.assertEqual(404, response.status_code)
         self.assertEqual(
             {"detail": "No product found for the code specified."},
             response.json(),
         )
-        get_product_by_code.assert_called_with(
-            db=self.db, code=self.code_to_delete
-        )
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
         delete_product.assert_not_called()
 
     @patch("server.routes.products.repo.delete_product")
-    @patch("server.routes.products.repo.get_product_by_code")
+    @patch("server.routes.products.repo.get_product_by_uuid")
     def test_should_return_401_when_the_product_is_already_taken(
-        self, get_product_by_code, delete_product
+        self, get_product_by_uuid, delete_product
     ):
-        get_product_by_code.return_value = ProductFactory(taken=True)
+        get_product_by_uuid.return_value = ProductFactory(taken=True)
 
-        response = self.client.delete(f"/products/{self.code_to_delete}")
+        response = self.client.delete(f"/products/{self.uuid}")
 
         self.assertEqual(401, response.status_code)
         self.assertEqual(
             {"detail": "Cannot delete products already taken."},
             response.json(),
         )
-        get_product_by_code.assert_called_with(
-            db=self.db, code=self.code_to_delete
-        )
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
         delete_product.assert_not_called()
 
     @patch("server.routes.products.repo.delete_product")
-    @patch("server.routes.products.repo.get_product_by_code")
+    @patch("server.routes.products.repo.get_product_by_uuid")
     def test_should_return_200_and_remove_the_product(
-        self, get_product_by_code, delete_product
+        self, get_product_by_uuid, delete_product
     ):
         product = ProductFactory(taken=False)
-        get_product_by_code.return_value = product
+        get_product_by_uuid.return_value = product
 
-        response = self.client.delete(f"/products/{self.code_to_delete}")
+        response = self.client.delete(f"/products/{self.uuid}")
 
         self.assertEqual(200, response.status_code)
         self.assertEqual({"deleted": True}, response.json())
 
-        get_product_by_code.assert_called_with(
-            db=self.db, code=self.code_to_delete
-        )
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
         delete_product.assert_called_with(db=self.db, product=product)

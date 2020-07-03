@@ -64,7 +64,7 @@ class TestGet(TestRoute):
         self.assertEqual(
             [
                 {
-                    "id": order.id,
+                    "uuid": order.uuid,
                     "mod_id": order.mod_id,
                     "mod_display_name": order.mod_display_name,
                     "owner_display_name": order.owner_display_name,
@@ -74,7 +74,7 @@ class TestGet(TestRoute):
                     "product": {
                         "code": order.product.code,
                         "summary": order.product.summary,
-                        "id": order.product.id,
+                        "uuid": order.product.uuid,
                         "taken": order.product.taken,
                         "taken_at": TestHelpers.datetime_to_str(
                             order.product.taken_at
@@ -98,60 +98,55 @@ class TestGet(TestRoute):
 class TestPost(TestRoute):
     def setUp(self) -> NoReturn:
         super().setUp()
+        self.uuid = self.faker.uuid4()
         self.payload = {
             "mod_id": self.faker.md5(),
             "mod_display_name": self.faker.user_name(),
             "owner_display_name": self.faker.user_name(),
         }
 
-    @patch("server.routes.orders.product_repo.get_product_by_code")
-    def test_should_return_404_when_the_product_code_is_not_found(
-        self, get_product_by_code
+    @patch("server.routes.orders.product_repo.get_product_by_uuid")
+    def test_should_return_404_when_the_product_uuid_is_not_found(
+        self, get_product_by_uuid
     ):
-        get_product_by_code.return_value = None
-        product_code = self.faker.sha256()
+        get_product_by_uuid.return_value = None
 
-        response = self.client.post(
-            f"/orders/{product_code}", json=self.payload
-        )
+        response = self.client.post(f"/orders/{self.uuid}", json=self.payload)
 
         self.assertEqual(404, response.status_code)
         self.assertEqual(
-            {"detail": "No product found for the code provided."},
+            {"detail": "No product found for the uuid provided."},
             response.json(),
         )
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
 
-    @patch("server.routes.orders.product_repo.get_product_by_code")
-    def test_should_return_409_when_the_product_code_already_taken(
-        self, get_product_by_code
+    @patch("server.routes.orders.product_repo.get_product_by_uuid")
+    def test_should_return_409_when_the_product_uuid_already_taken(
+        self, get_product_by_uuid
     ):
-        get_product_by_code.return_value = ProductFactory(taken=True)
-        product_code = self.faker.sha256()
+        get_product_by_uuid.return_value = ProductFactory(taken=True)
 
-        response = self.client.post(
-            f"/orders/{product_code}", json=self.payload
-        )
+        response = self.client.post(f"/orders/{self.uuid}", json=self.payload)
 
         self.assertEqual(409, response.status_code)
         self.assertEqual(
             {"detail": "The product code is already taken."}, response.json(),
         )
-        get_product_by_code.assert_called_with(db=self.db, code=product_code)
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
 
     @patch("server.routes.orders.repo.create_order_for_product")
-    @patch("server.routes.orders.product_repo.get_product_by_code")
+    @patch("server.routes.orders.product_repo.get_product_by_uuid")
     def test_should_return_200_and_create_a_new_order(
-        self, get_product_by_code, create_order_for_product
+        self, get_product_by_uuid, create_order_for_product
     ):
         product = ProductFactory(taken=False)
         order = OrderFactory(product__taken=True)
 
-        get_product_by_code.return_value = product
+        get_product_by_uuid.return_value = product
         create_order_for_product.return_value = order
-        product_code = self.faker.sha256()
 
         response = self.client.post(
-            f"/orders/{product_code}", json=self.payload
+            f"/orders/{self.uuid}", json=self.payload
         )
 
         self.assertEqual(201, response.status_code)
@@ -161,14 +156,14 @@ class TestPost(TestRoute):
                 "mod_id": order.mod_id,
                 "mod_display_name": order.mod_display_name,
                 "owner_display_name": order.owner_display_name,
-                "id": order.id,
+                "uuid": order.uuid,
                 "requested_at": TestHelpers.datetime_to_str(
                     order.requested_at
                 ),
                 "product": {
                     "code": order.product.code,
                     "summary": order.product.summary,
-                    "id": order.product.id,
+                    "uuid": order.product.uuid,
                     "taken": order.product.taken,
                     "taken_at": TestHelpers.datetime_to_str(
                         order.product.taken_at
@@ -177,3 +172,5 @@ class TestPost(TestRoute):
             },
             response.json(),
         )
+
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)

@@ -54,16 +54,16 @@ def create_product(
 
 
 @router.put(
-    "/{code}",
+    "/{uuid}",
     summary="Updates an existing product.",
     response_model=schemas.Product,
     status_code=status.HTTP_200_OK,
 )
 def update_product(
-    code: str, product: schemas.ProductUpdate, db: Session = Depends(auth)
+    uuid: str, product: schemas.ProductUpdate, db: Session = Depends(auth)
 ):
     """Update an existing product."""
-    if db_product := repo.get_product_by_code(db=db, code=code):
+    if db_product := repo.get_product_by_uuid(db=db, uuid=uuid):
         if repo.get_product_by_code(db=db, code=product.code):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
@@ -80,14 +80,14 @@ def update_product(
 
 
 @router.delete(
-    "/{code}",
-    summary="Delete a registed product.",
+    "/{uuid}",
+    summary="Delete a registered product.",
     response_model=Dict[str, bool],
     status_code=status.HTTP_200_OK,
 )
-def delete_product(code: str, db: Session = Depends(auth)):
-    """Delete a registed product."""
-    if product := repo.get_product_by_code(db=db, code=code):
+def delete_product(uuid: str, db: Session = Depends(auth)):
+    """Delete a registered product."""
+    if product := repo.get_product_by_uuid(db=db, uuid=uuid):
         if product.taken:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

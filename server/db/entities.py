@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import NoReturn
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
@@ -31,6 +32,7 @@ class Product(Entity):
     """
 
     __tablename__ = "product"
+    uuid = Column(UUID(as_uuid=True), nullable=False, unique=True)
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
     taken = Column(Boolean, nullable=False, default=False)
@@ -50,6 +52,7 @@ class Order(Entity):
     """
 
     __tablename__ = "order"
+    uuid = Column(UUID(as_uuid=True), nullable=False, unique=True)
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
     owner_display_name = Column(String, nullable=False)

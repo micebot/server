@@ -8,6 +8,7 @@ class ProductFactory(factory.Factory):
         model = Product
 
     id = factory.Sequence(lambda n: n)
+    uuid = factory.Faker('uuid4')
     code = factory.Faker("md5")
     summary = factory.Faker("sentence")
     taken = factory.Faker("boolean")
@@ -25,6 +26,7 @@ class OrderFactory(factory.Factory):
         model = Order
 
     id = factory.Sequence(lambda n: n)
+    uuid = factory.Faker('uuid4')
     mod_id = factory.Faker("uuid4")
     mod_display_name = factory.Faker("user_name")
     owner_display_name = factory.Faker("user_name")
