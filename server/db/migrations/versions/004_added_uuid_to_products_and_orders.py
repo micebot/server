@@ -16,6 +16,7 @@ depends_on = None
 
 
 def upgrade():
+    """Added uuid for tables 'order' and 'product'."""
     op.add_column(
         "order",
         sa.Column("uuid", postgresql.UUID(as_uuid=True), nullable=False),
@@ -29,6 +30,7 @@ def upgrade():
 
 
 def downgrade():
+    """Remove the uuid column from 'order' and 'product' tables."""
     op.drop_constraint("uq_uuid_product", "product")
     op.drop_column("product", "uuid")
     op.drop_constraint("uq_uuid_order", "order")
