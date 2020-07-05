@@ -56,3 +56,7 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class HeartBeat(BaseModel):
+    valid: bool
