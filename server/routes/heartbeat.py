@@ -14,4 +14,5 @@ router = APIRouter()
     response_model=schemas.HeartBeat,
 )
 def heartbeat(_: Session = Depends(auth)):
+    """Check if code/app is valid."""
     return {"valid": True}

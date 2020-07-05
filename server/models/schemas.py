@@ -59,4 +59,6 @@ class Order(OrderBase):
 
 
 class HeartBeat(BaseModel):
+    """The schema for heartbeat verification."""
+
     valid: bool
