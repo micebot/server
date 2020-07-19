@@ -69,6 +69,6 @@ As credências para autenticação são:
 [11]:https://github.com/micebot/pubsub
 [12]:https://github.com/micebot/discord
 [13]:https://github.com/micebot/
-[14]:https://micebot-server-dev.herokuapp.com/docs
-[15]:https://micebot-server-dev.herokuapp.com/redoc
+[14]:https://app-dev-micebot.herokuapp.com/docs
+[15]:https://app-dev-micebot.herokuapp.com/redoc
 [16]:https://devcenter.heroku.com/articles/free-dyno-hours
