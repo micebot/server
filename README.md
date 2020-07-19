@@ -34,7 +34,10 @@ Você pode visualizar a documentação [neste link][15].
 
 Também disponibilizamos uma URL com a "documentação viva" para que você possa
 testar nosso endpoint e as rotas da aplicação [neste outro link][14]. Este
-ambiente é isolado para testes. 💣 As credências para autenticação são:
+ambiente é isolado para testes 💣 (_pode-se demorar para carregar na primeira vez
+que você acessar a API. Isso porque estamos usando os dynos padrões do Heroku que
+"desligam" a aplicação após [30min de inatividade][16], isto é, sem nenhuma requisição nesse período_). 
+As credências para autenticação são:
 
 - Usuário I:
     - username: `ps_user`
@@ -68,3 +71,4 @@ ambiente é isolado para testes. 💣 As credências para autenticação são:
 [13]:https://github.com/micebot/
 [14]:https://micebot-server-dev.herokuapp.com/docs
 [15]:https://micebot-server-dev.herokuapp.com/redoc
+[16]:https://devcenter.heroku.com/articles/free-dyno-hours
