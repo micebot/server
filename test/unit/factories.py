@@ -12,12 +12,11 @@ class ProductFactory(factory.Factory):
     code = factory.Faker("md5")
     summary = factory.Faker("sentence")
     taken = factory.Faker("boolean")
-    taken_at = factory.LazyAttribute(
-        lambda obj: factory.Faker(
-            "date_time_between", start_date="-5d", end_date="now"
-        ).generate()
-        if obj.taken
-        else None
+    created_at = factory.Faker(
+        "date_time_between", start_date="-30d", end_date="-10d"
+    )
+    updated_at = factory.Faker(
+        "date_time_between", start_date="-5d", end_date="now"
     )
 
 

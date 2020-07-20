@@ -1,7 +1,5 @@
 from unittest.mock import MagicMock, patch
 
-from freezegun import freeze_time
-
 from server.db import entities
 from server.db.repo.orders import (
     get_orders,
@@ -12,7 +10,7 @@ from server.db.repo.orders import (
 )
 from server.models import schemas
 from test.unit.factories import OrderFactory
-from test.unit.fixtures import Test, DEFAULT_DATETIME_STR, DEFAULT_DATETIME
+from test.unit.fixtures import Test
 
 
 class TestGetOrders(Test):
@@ -121,7 +119,6 @@ class TestGetOrderByProductCode(Test):
 
 
 class TestCreateOrderForProduct(Test):
-    @freeze_time(DEFAULT_DATETIME_STR)
     @patch("server.db.repo.orders.entities.Order")
     def test_should_persist_and_mark_product_as_taken(self, order_instance):
         db = MagicMock()
@@ -138,7 +135,6 @@ class TestCreateOrderForProduct(Test):
             db=db, product=db_order.product, order=order
         )
         self.assertTrue(db_order.product.taken)
-        self.assertEqual(db_order.product.taken_at, DEFAULT_DATETIME)
 
         db.add.assert_called_with(db_order)
         db.commit.assert_called_once()

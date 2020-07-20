@@ -12,6 +12,7 @@ class TestGet(TestRoute):
         self.skip = self.faker.pyint()
         self.limit = self.faker.pyint()
         self.taken = self.faker.boolean()
+        self.desc = self.faker.boolean()
 
     @patch("server.routes.products.repo.get_products")
     def test_should_return_404_when_there_are_no_products_registered(
@@ -25,6 +26,7 @@ class TestGet(TestRoute):
                 "skip": self.skip,
                 "limit": self.limit,
                 "taken": self.taken,
+                "desc": self.desc,
             },
         )
         self.assertEqual(404, response.status_code)
@@ -33,7 +35,11 @@ class TestGet(TestRoute):
         )
 
         get_products.assert_called_with(
-            db=self.db, skip=self.skip, limit=self.limit, taken=self.taken
+            db=self.db,
+            skip=self.skip,
+            limit=self.limit,
+            taken=self.taken,
+            desc=self.desc,
         )
 
     @patch("server.routes.products.repo.get_products")
@@ -47,6 +53,7 @@ class TestGet(TestRoute):
                 "skip": self.skip,
                 "limit": self.limit,
                 "taken": self.taken,
+                "desc": self.desc,
             },
         )
 
@@ -58,14 +65,23 @@ class TestGet(TestRoute):
                     "summary": product.summary,
                     "uuid": product.uuid,
                     "taken": product.taken,
-                    "taken_at": TestHelpers.datetime_to_str(product.taken_at),
+                    "updated_at": TestHelpers.datetime_to_str(
+                        product.updated_at
+                    ),
+                    "created_at": TestHelpers.datetime_to_str(
+                        product.created_at
+                    ),
                 }
             ],
             response.json(),
         )
 
         get_products.assert_called_with(
-            db=self.db, skip=self.skip, limit=self.limit, taken=self.taken
+            db=self.db,
+            skip=self.skip,
+            limit=self.limit,
+            taken=self.taken,
+            desc=self.desc,
         )
 
 
@@ -113,7 +129,8 @@ class TestPost(TestRoute):
                 "summary": product.summary,
                 "uuid": product.uuid,
                 "taken": product.taken,
-                "taken_at": TestHelpers.datetime_to_str(product.taken_at),
+                "updated_at": TestHelpers.datetime_to_str(product.updated_at),
+                "created_at": TestHelpers.datetime_to_str(product.created_at),
             },
             response.json(),
         )
@@ -201,8 +218,11 @@ class TestPut(TestRoute):
                 "summary": updated_product_value.summary,
                 "uuid": updated_product_value.uuid,
                 "taken": updated_product_value.taken,
-                "taken_at": TestHelpers.datetime_to_str(
-                    updated_product_value.taken_at
+                "updated_at": TestHelpers.datetime_to_str(
+                    updated_product_value.updated_at
+                ),
+                "created_at": TestHelpers.datetime_to_str(
+                    updated_product_value.created_at
                 ),
             },
             response.json(),

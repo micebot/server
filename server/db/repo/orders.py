@@ -105,7 +105,6 @@ def create_order_for_product(
     """
 
     product.taken = True
-    product.taken_at = datetime.utcnow()
 
     db_order = entities.Order(**order.dict())
     db_order.product = product

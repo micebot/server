@@ -2,7 +2,15 @@ from datetime import datetime
 from typing import NoReturn
 from uuid import uuid4
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Boolean,
+    DateTime,
+    ForeignKey,
+    sql,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -38,8 +46,16 @@ class Product(Entity):
     )
     code = Column(String, nullable=False, unique=True, index=True)
     summary = Column(String, nullable=False)
-    taken = Column(Boolean, nullable=False, default=False)
-    taken_at = Column(DateTime, nullable=True)
+    taken = Column(Boolean, nullable=False, default=sql.false())
+    created_at = Column(
+        DateTime, nullable=False, server_default=sql.func.now()
+    )
+    updated_at = Column(
+        DateTime,
+        nullable=False,
+        server_default=sql.func.now(),
+        onupdate=sql.func.now(),
+    )
 
     def __repr__(self):  # pragma: no cover
         return str(self.__dict__)
@@ -61,7 +77,7 @@ class Order(Entity):
     mod_id = Column(String, nullable=False)
     mod_display_name = Column(String, nullable=False)
     owner_display_name = Column(String, nullable=False)
-    requested_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    requested_at = Column(DateTime, nullable=False, default=sql.func.now())
     product_id = Column(Integer, ForeignKey("product.id"), nullable=False)
     product = relationship("Product")
 

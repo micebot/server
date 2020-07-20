@@ -28,7 +28,8 @@ class Product(ProductBase):
 
     uuid: UUID4
     taken: bool = False
-    taken_at: datetime = None
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         orm_mode = True

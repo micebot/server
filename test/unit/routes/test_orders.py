@@ -84,8 +84,11 @@ class TestGetAllOrders(TestRoute):
                             "summary": order.product.summary,
                             "uuid": order.product.uuid,
                             "taken": order.product.taken,
-                            "taken_at": TestHelpers.datetime_to_str(
-                                order.product.taken_at
+                            "created_at": TestHelpers.datetime_to_str(
+                                order.product.created_at
+                            ),
+                            "updated_at": TestHelpers.datetime_to_str(
+                                order.product.updated_at
                             ),
                         },
                     }
@@ -140,7 +143,9 @@ class TestGetLatestOrders(TestRoute):
         get_latest_orders.return_value = orders_list
         get_orders_count.return_value = orders_count
 
-        response = self.client.get("/orders/latest", params={"limit": self.limit},)
+        response = self.client.get(
+            "/orders/latest", params={"limit": self.limit},
+        )
 
         self.assertEqual(200, response.status_code)
         self.assertEqual(
@@ -160,8 +165,11 @@ class TestGetLatestOrders(TestRoute):
                             "summary": order.product.summary,
                             "uuid": order.product.uuid,
                             "taken": order.product.taken,
-                            "taken_at": TestHelpers.datetime_to_str(
-                                order.product.taken_at
+                            "created_at": TestHelpers.datetime_to_str(
+                                order.product.created_at
+                            ),
+                            "updated_at": TestHelpers.datetime_to_str(
+                                order.product.updated_at
                             ),
                         },
                     }
@@ -242,8 +250,11 @@ class TestPost(TestRoute):
                     "summary": order.product.summary,
                     "uuid": order.product.uuid,
                     "taken": order.product.taken,
-                    "taken_at": TestHelpers.datetime_to_str(
-                        order.product.taken_at
+                    "created_at": TestHelpers.datetime_to_str(
+                        order.product.created_at
+                    ),
+                    "updated_at": TestHelpers.datetime_to_str(
+                        order.product.updated_at
                     ),
                 },
             },

@@ -1,13 +1,18 @@
 from typing import Optional, List, NoReturn
 
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.operators import ColumnOperators
 
 from server.db import entities
 from server.models import schemas
 
 
 def get_products(
-    db: Session, skip: int = 0, limit: int = 50, taken: bool = False
+    db: Session,
+    skip: int = 0,
+    limit: int = 50,
+    taken: bool = False,
+    desc: bool = True,
 ) -> Optional[List[entities.Product]]:
     """
     Get the registed products using filters.
@@ -17,13 +22,21 @@ def get_products(
         - skip: the number of filtered entities to skip.
         - limit: the number of entities to limit the query.
         - taken: filter by products that have already taken or not.
+        - desc: order by descending consdering the `created_at` value.
 
     Returns:
         - the list of products or `None` if there are no products to
         return using the filter specified.
     """
+    created_order = (
+        entities.Product.created_at.desc()
+        if desc
+        else entities.Product.created_at.asc()
+    )
+
     return (
         db.query(entities.Product)
+        .order_by(created_order, entities.Product.id.desc())
         .filter_by(taken=taken)
         .offset(skip)
         .limit(limit)

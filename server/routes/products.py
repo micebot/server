@@ -20,11 +20,12 @@ def get_products(
     skip: int = 0,
     limit: int = 50,
     taken: bool = False,
+    desc: bool = True,
     db: Session = Depends(auth),
 ):
     """Get all the products."""
     if entities := repo.get_products(
-        db=db, skip=skip, limit=limit, taken=taken
+        db=db, skip=skip, limit=limit, taken=taken, desc=desc
     ):
         return entities
 

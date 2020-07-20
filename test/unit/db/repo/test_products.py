@@ -21,10 +21,10 @@ class TestGetProducts(Test):
         get_products(db=db)
 
         db.query.assert_called_with(entities.Product)
-        db.query().filter_by.assert_called_with(taken=False)
-        db.query().filter_by().offset.assert_called_with(0)
-        db.query().filter_by().offset().limit.assert_called_with(50)
-        db.query().filter_by().offset().limit().all.assert_called_once()
+        db.query().order_by().filter_by.assert_called_with(taken=False)
+        db.query().order_by().filter_by().offset.assert_called_with(0)
+        db.query().order_by().filter_by().offset().limit.assert_called_with(50)
+        db.query().order_by().filter_by().offset().limit().all.assert_called_once()  # noqa
 
     def test_should_query_using_the_specified_parameters(self):
 
@@ -37,10 +37,12 @@ class TestGetProducts(Test):
         get_products(db=db, skip=skip, limit=limit, taken=taken)
 
         db.query.assert_called_with(entities.Product)
-        db.query().filter_by.assert_called_with(taken=taken)
-        db.query().filter_by().offset.assert_called_with(skip)
-        db.query().filter_by().offset().limit.assert_called_with(limit)
-        db.query().filter_by().offset().limit().all.assert_called_once()
+        db.query().order_by().filter_by.assert_called_with(taken=taken)
+        db.query().order_by().filter_by().offset.assert_called_with(skip)
+        db.query().order_by().filter_by().offset().limit.assert_called_with(
+            limit
+        )
+        db.query().order_by().filter_by().offset().limit().all.assert_called_once()  # noqa
 
 
 class TestGetProductByUUID(Test):
