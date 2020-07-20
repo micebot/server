@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -15,26 +13,40 @@ router = APIRouter()
     "/",
     summary="Get all the orders.",
     status_code=status.HTTP_200_OK,
-    response_model=List[schemas.Order],
+    response_model=schemas.OrderWithTotal,
 )
 def get_orders(
     skip: int = 0,
     limit: int = 50,
     moderator: str = None,
     owner: str = None,
-    taken: bool = False,
     db: Session = Depends(auth),
 ):
     """Get all the orders."""
     if entities := repo.get_orders(
-        db=db,
-        skip=skip,
-        limit=limit,
-        moderator=moderator,
-        owner=owner,
-        taken=taken,
+        db=db, skip=skip, limit=limit, moderator=moderator, owner=owner,
     ):
-        return entities
+        return {"total": repo.get_orders_count(db=db), "orders": entities}
+
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="No orders registered yet.",
+    )
+
+
+@router.get(
+    "/latest",
+    summary="Get the latest orders.",
+    status_code=status.HTTP_200_OK,
+    response_model=schemas.OrderWithTotal,
+)
+def get_latest_orders(
+    limit: int = 10,
+    db: Session = Depends(auth)
+):
+
+    if entities := repo.get_latest_orders(db=db, limit=limit):
+        return {"total": repo.get_orders_count(db=db), "orders": entities}
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,

@@ -13,7 +13,6 @@ def get_orders(
     limit: int = 50,
     moderator: str = None,
     owner: str = None,
-    taken: bool = False,
 ) -> Optional[List[entities.Order]]:
     """
     Get the registed orders using filters.
@@ -38,10 +37,17 @@ def get_orders(
     if owner:
         query = query.filter_by(owner_display_name=owner)
 
+    return query.offset(skip).limit(limit).all()
+
+
+def get_orders_count(db: Session) -> int:
+    return db.query(entities.Order).count()
+
+
+def get_latest_orders(db: Session, limit: int = 50):
     return (
-        query.join(entities.Product)
-        .filter(entities.Product.taken == taken)
-        .offset(skip)
+        db.query(entities.Order)
+        .order_by(entities.Order.requested_at.desc())
         .limit(limit)
         .all()
     )

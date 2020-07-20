@@ -5,7 +5,9 @@ from server.db.repo.products import (
     get_products,
     create_product,
     update_product,
-    delete_product, get_product_by_uuid,
+    delete_product,
+    get_product_by_uuid,
+    get_product_by_code,
 )
 from server.models import schemas
 from test.unit.factories import ProductFactory
@@ -50,6 +52,18 @@ class TestGetProductByUUID(Test):
 
         db.query.assert_called_with(entities.Product)
         db.query().filter_by.assert_called_with(uuid=uuid)
+        db.query().filter_by().first.assert_called_once()
+
+
+class TestGetProductByCode(Test):
+    def test_should_execute_query_with_specified_parameters(self):
+        db = MagicMock()
+        code = self.faker.word()
+
+        get_product_by_code(db=db, code=code)
+
+        db.query.assert_called_with(entities.Product)
+        db.query().filter_by.assert_called_with(code=code)
         db.query().filter_by().first.assert_called_once()
 
 

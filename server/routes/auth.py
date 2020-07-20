@@ -7,11 +7,6 @@ from server.models.oauth2 import create_access_token
 
 router = APIRouter()
 
-auth_exception = HTTPException(
-    status_code=status.HTTP_401_UNAUTHORIZED,
-    detail="Could not validate your credentials.",
-)
-
 
 @router.post("/", summary="Authentication")
 async def authenticate(

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel, UUID4
 
@@ -56,6 +57,11 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class OrderWithTotal(BaseModel):
+    total: int
+    orders: List[Order]
 
 
 class HeartBeat(BaseModel):

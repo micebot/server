@@ -51,7 +51,7 @@ def get_product_by_code(db: Session, code: str) -> Optional[entities.Product]:
 
     Args:
         - db: the database session.
-        - uuid: the product unique ID to be used in query.
+        - code: the product code to be used in query.
 
     Returns:
         - the product object if it is found, otherwise `None` is returned.
