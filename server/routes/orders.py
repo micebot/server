@@ -40,11 +40,8 @@ def get_orders(
     status_code=status.HTTP_200_OK,
     response_model=schemas.OrderWithTotal,
 )
-def get_latest_orders(
-    limit: int = 10,
-    db: Session = Depends(auth)
-):
-
+def get_latest_orders(limit: int = 10, db: Session = Depends(auth)):
+    """Get the latest orders."""
     if entities := repo.get_latest_orders(db=db, limit=limit):
         return {"total": repo.get_orders_count(db=db), "orders": entities}
 

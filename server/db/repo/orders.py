@@ -41,10 +41,24 @@ def get_orders(
 
 
 def get_orders_count(db: Session) -> int:
+    """Return the number of entities from orders table."""
     return db.query(entities.Order).count()
 
 
-def get_latest_orders(db: Session, limit: int = 50):
+def get_latest_orders(
+    db: Session, limit: int = 50
+) -> Optional[List[entities.Order]]:
+    """
+    Get the latest orders filtered by the request at datetime.
+
+    Args:
+        - db: the database session.
+        - limit: the number of entities to limit the query.
+
+    Returns:
+        - the list of orders or `None` if there are no orders to return
+        using the filter specified.
+    """
     return (
         db.query(entities.Order)
         .order_by(entities.Order.requested_at.desc())

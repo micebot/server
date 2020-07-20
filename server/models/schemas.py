@@ -60,6 +60,8 @@ class Order(OrderBase):
 
 
 class OrderWithTotal(BaseModel):
+    """The total orders counter with the orders entities."""
+
     total: int
     orders: List[Order]
 
