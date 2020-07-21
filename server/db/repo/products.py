@@ -1,7 +1,6 @@
 from typing import Optional, List, NoReturn
 
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.operators import ColumnOperators
 
 from server.db import entities
 from server.models import schemas

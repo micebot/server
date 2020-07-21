@@ -16,6 +16,9 @@ depends_on = None
 
 
 def upgrade():
+    """
+    Add the created_at and updated_at to product table & remove taken_at.
+    """
     op.add_column(
         "product",
         sa.Column(
@@ -38,6 +41,9 @@ def upgrade():
 
 
 def downgrade():
+    """
+    Remove the created_at and updated_at from product table & add taken_at.
+    """
     op.add_column(
         "product",
         sa.Column(

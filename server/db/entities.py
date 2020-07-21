@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import NoReturn
 from uuid import uuid4
 
