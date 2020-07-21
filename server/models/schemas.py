@@ -37,6 +37,7 @@ class Product(ProductBase):
 
 class ProductDelete(BaseModel):
     """The responde schema for a product deletion."""
+
     deleted: bool
 
 

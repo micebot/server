@@ -28,12 +28,12 @@ def get_products(
         total, total_available, total_taken = repo.get_products_count(db=db)
 
         return {
-            'total': {
-              'all':  total,
-              'taken': total_taken,
-              'available': total_available
+            "total": {
+                "all": total,
+                "taken": total_taken,
+                "available": total_available,
             },
-            'products': entities
+            "products": entities,
         }
 
     raise HTTPException(
