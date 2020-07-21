@@ -8,6 +8,7 @@ from server.db.repo.products import (
     delete_product,
     get_product_by_uuid,
     get_product_by_code,
+    get_products_count,
 )
 from server.models import schemas
 from test.unit.factories import ProductFactory
@@ -43,6 +44,18 @@ class TestGetProducts(Test):
             limit
         )
         db.query().order_by().filter_by().offset().limit().all.assert_called_once()  # noqa
+
+
+class TestGetProductsCount(Test):
+    def test_should_query_product_count_for_all_taken_and_available(self):
+        db = MagicMock()
+
+        get_products_count(db=db)
+
+        db.query().count.assert_called_once()
+        db.query().filter_by.assert_any_call(taken=False)
+        db.query().filter_by.assert_any_call(taken=True)
+        self.assertEqual(2, db.query().filter_by().count.call_count)
 
 
 class TestGetProductByUUID(Test):

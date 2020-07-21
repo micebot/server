@@ -1,5 +1,3 @@
-from typing import List, Dict
-
 from fastapi import APIRouter, status, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -14,7 +12,7 @@ router = APIRouter()
     "/",
     summary="Get all the products.",
     status_code=status.HTTP_200_OK,
-    response_model=List[schemas.Product],
+    response_model=schemas.ProductWithTotal,
 )
 def get_products(
     skip: int = 0,
@@ -27,7 +25,16 @@ def get_products(
     if entities := repo.get_products(
         db=db, skip=skip, limit=limit, taken=taken, desc=desc
     ):
-        return entities
+        total, total_available, total_taken = repo.get_products_count(db=db)
+
+        return {
+            'total': {
+              'all':  total,
+              'taken': total_taken,
+              'available': total_available
+            },
+            'products': entities
+        }
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -83,7 +90,7 @@ def update_product(
 @router.delete(
     "/{uuid}",
     summary="Delete a registered product.",
-    response_model=Dict[str, bool],
+    response_model=schemas.ProductDelete,
     status_code=status.HTTP_200_OK,
 )
 def delete_product(uuid: str, db: Session = Depends(auth)):

@@ -35,6 +35,26 @@ class Product(ProductBase):
         orm_mode = True
 
 
+class ProductDelete(BaseModel):
+    """The responde schema for a product deletion."""
+    deleted: bool
+
+
+class ProductCount(BaseModel):
+    """The product counter statistics."""
+
+    all: int
+    taken: int
+    available: int
+
+
+class ProductWithTotal(BaseModel):
+    """The total product counter with the products entities."""
+
+    total: ProductCount
+    products: List[Product]
+
+
 class OrderBase(BaseModel):
     """The base properties of an order."""
 

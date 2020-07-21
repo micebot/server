@@ -1,4 +1,4 @@
-from typing import Optional, List, NoReturn
+from typing import Optional, List, NoReturn, Tuple
 
 from sqlalchemy.orm import Session
 
@@ -40,6 +40,21 @@ def get_products(
         .offset(skip)
         .limit(limit)
         .all()
+    )
+
+
+def get_products_count(db: Session) -> Tuple[int, int, int]:
+    """
+    Get the number of products registered.
+
+    Returns:
+        - a tuple containg the number of products registed, the number of
+        products available for use and the number of products already taken.
+    """
+    return (
+        db.query(entities.Product).count(),
+        db.query(entities.Product).filter_by(taken=False).count(),
+        db.query(entities.Product).filter_by(taken=True).count(),
     )
 
 

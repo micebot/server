@@ -42,10 +42,22 @@ class TestGet(TestRoute):
             desc=self.desc,
         )
 
+    @patch("server.routes.products.repo.get_products_count")
     @patch("server.routes.products.repo.get_products")
-    def test_should_return_200_with_entities(self, get_products):
+    def test_should_return_200_with_entities(
+        self, get_products, get_products_count
+    ):
+        all_products = self.faker.pyint()
+        products_taken = self.faker.pyint()
+        available_products = self.faker.pyint()
+
         product = ProductFactory()
         get_products.return_value = [product]
+        get_products_count.return_value = (
+            all_products,
+            available_products,
+            products_taken,
+        )
 
         response = self.client.get(
             "/products",
@@ -59,23 +71,31 @@ class TestGet(TestRoute):
 
         self.assertEqual(200, response.status_code)
         self.assertEqual(
-            [
-                {
-                    "code": product.code,
-                    "summary": product.summary,
-                    "uuid": product.uuid,
-                    "taken": product.taken,
-                    "updated_at": TestHelpers.datetime_to_str(
-                        product.updated_at
-                    ),
-                    "created_at": TestHelpers.datetime_to_str(
-                        product.created_at
-                    ),
-                }
-            ],
+            {
+                "total": {
+                    "all": all_products,
+                    "taken": products_taken,
+                    "available": available_products,
+                },
+                "products": [
+                    {
+                        "code": product.code,
+                        "summary": product.summary,
+                        "uuid": product.uuid,
+                        "taken": product.taken,
+                        "updated_at": TestHelpers.datetime_to_str(
+                            product.updated_at
+                        ),
+                        "created_at": TestHelpers.datetime_to_str(
+                            product.created_at
+                        ),
+                    }
+                ],
+            },
             response.json(),
         )
 
+        get_products_count.assert_called_with(db=self.db)
         get_products.assert_called_with(
             db=self.db,
             skip=self.skip,
