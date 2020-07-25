@@ -12,6 +12,7 @@ class TestGetAllOrders(TestRoute):
         self.limit = self.faker.pyint()
         self.moderator = self.faker.user_name()
         self.owner = self.faker.user_name()
+        self.desc = self.faker.boolean()
 
     @patch("server.routes.orders.repo.get_orders_count")
     @patch("server.routes.orders.repo.get_orders")
@@ -27,6 +28,7 @@ class TestGetAllOrders(TestRoute):
                 "limit": self.limit,
                 "moderator": self.moderator,
                 "owner": self.owner,
+                "desc": self.desc
             },
         )
         self.assertEqual(404, response.status_code)
@@ -41,6 +43,7 @@ class TestGetAllOrders(TestRoute):
             limit=self.limit,
             moderator=self.moderator,
             owner=self.owner,
+            desc=self.desc
         )
 
     @patch("server.routes.orders.repo.get_orders_count")
@@ -63,6 +66,7 @@ class TestGetAllOrders(TestRoute):
                 "limit": self.limit,
                 "moderator": self.moderator,
                 "owner": self.owner,
+                "desc": self.desc
             },
         )
 
@@ -104,82 +108,8 @@ class TestGetAllOrders(TestRoute):
             limit=self.limit,
             moderator=self.moderator,
             owner=self.owner,
+            desc=self.desc
         )
-
-
-class TestGetLatestOrders(TestRoute):
-    def setUp(self) -> NoReturn:
-        super().setUp()
-        self.limit = self.faker.pyint()
-
-    @patch("server.routes.orders.repo.get_orders_count")
-    @patch("server.routes.orders.repo.get_latest_orders")
-    def test_should_return_404_when_there_are_no_orders_registered(
-        self, get_latest_orders, get_orders_count
-    ):
-        get_latest_orders.return_value = None
-
-        response = self.client.get(
-            "/orders/latest", params={"limit": self.limit},
-        )
-        self.assertEqual(404, response.status_code)
-        self.assertEqual(
-            {"detail": "No orders registered yet."}, response.json()
-        )
-
-        get_orders_count.assert_not_called()
-        get_latest_orders.assert_called_with(db=self.db, limit=self.limit)
-
-    @patch("server.routes.orders.repo.get_orders_count")
-    @patch("server.routes.orders.repo.get_latest_orders")
-    def test_should_return_200_with_entities(
-        self, get_latest_orders, get_orders_count
-    ):
-        order = OrderFactory()
-
-        orders_list = [order]
-        orders_count = len(orders_list)
-
-        get_latest_orders.return_value = orders_list
-        get_orders_count.return_value = orders_count
-
-        response = self.client.get(
-            "/orders/latest", params={"limit": self.limit},
-        )
-
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(
-            {
-                "total": orders_count,
-                "orders": [
-                    {
-                        "uuid": order.uuid,
-                        "mod_id": order.mod_id,
-                        "mod_display_name": order.mod_display_name,
-                        "owner_display_name": order.owner_display_name,
-                        "requested_at": TestHelpers.datetime_to_str(
-                            order.requested_at
-                        ),
-                        "product": {
-                            "code": order.product.code,
-                            "summary": order.product.summary,
-                            "uuid": order.product.uuid,
-                            "taken": order.product.taken,
-                            "created_at": TestHelpers.datetime_to_str(
-                                order.product.created_at
-                            ),
-                            "updated_at": TestHelpers.datetime_to_str(
-                                order.product.updated_at
-                            ),
-                        },
-                    }
-                ],
-            },
-            response.json(),
-        )
-
-        get_orders_count.assert_called_with(db=self.db)
-        get_latest_orders.assert_called_with(db=self.db, limit=self.limit)
 
 
 class TestPost(TestRoute):

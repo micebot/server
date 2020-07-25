@@ -6,7 +6,6 @@ from server.db.repo.orders import (
     get_order_by_product_code,
     create_order_for_product,
     get_orders_count,
-    get_latest_orders,
 )
 from server.models import schemas
 from test.unit.factories import OrderFactory
@@ -32,7 +31,16 @@ class TestGetOrders(Test):
         db.query.assert_called_with(entities.Order)
         db.query.filter_by(owner_display_name=owner_display_name)
 
-    def test_should_query_using_default_parameters(self):
+    @patch("server.db.repo.orders.entities.Order")
+    def test_should_query_using_default_parameters_on_get_orders(
+        self, order_instance
+    ):
+        asc_request_at = MagicMock()
+        desc_request_at = MagicMock()
+
+        order_instance.requested_at.desc.return_value = desc_request_at
+        order_instance.requested_at.asc.return_value = asc_request_at
+
         db = MagicMock()
         db_query = MagicMock()
         db.query.return_value = db_query
@@ -40,11 +48,24 @@ class TestGetOrders(Test):
         get_orders(db=db)
 
         db.query.assert_called_with(entities.Order)
-        db_query.offset.assert_called_with(0)
-        db_query.offset().limit.assert_called_with(50)
-        db_query.offset().limit().all.assert_called_once()
+        db.query().order_by.assert_called_with(desc_request_at)
+        db_query.order_by().offset.assert_called_with(0)
+        db_query.order_by().offset().limit.assert_called_with(50)
+        db_query.order_by().offset().limit().all.assert_called_once()
 
-    def test_should_query_using_correct_parameters(self):
+        order_instance.requested_at.asc.assert_not_called()
+        order_instance.requested_at.desc.assert_called_once()
+
+    @patch("server.db.repo.orders.entities.Order")
+    def test_should_query_using_correct_parameters_on_get_orders(
+        self, order_instance
+    ):
+        asc_request_at = MagicMock()
+        desc_request_at = MagicMock()
+
+        order_instance.requested_at.desc.return_value = desc_request_at
+        order_instance.requested_at.asc.return_value = asc_request_at
+
         db = MagicMock()
         db_query = MagicMock()
         db.query.return_value = db_query
@@ -52,14 +73,16 @@ class TestGetOrders(Test):
         skip = self.faker.pyint()
         limit = self.faker.pyint()
 
-        get_orders(
-            db=db, skip=skip, limit=limit,
-        )
+        get_orders(db=db, skip=skip, limit=limit, desc=False)
 
         db.query.assert_called_with(entities.Order)
-        db_query.offset.assert_called_with(skip)
-        db_query.offset().limit.assert_called_with(limit)
-        db_query.offset().limit().all.assert_called_once()
+        db.query().order_by.assert_called_with(asc_request_at)
+        db_query.order_by().offset.assert_called_with(skip)
+        db_query.order_by().offset().limit.assert_called_with(limit)
+        db_query.order_by().offset().limit().all.assert_called_once()
+
+        order_instance.requested_at.asc.assert_called_once()
+        order_instance.requested_at.desc.assert_not_called()
 
 
 class TestGetOrdersCount(Test):
@@ -70,39 +93,6 @@ class TestGetOrdersCount(Test):
 
         db.query.assert_called_with(entities.Order)
         db.query().count.assert_called_once()
-
-
-class TestGetLatestOrders(Test):
-    @patch("server.db.repo.orders.entities.Order")
-    def test_should_query_the_latest_orders_with_default_parameters(
-            self, order_instance
-    ):
-        db = MagicMock()
-        desc_function = MagicMock()
-        order_instance.requested_at.desc.return_value = desc_function
-
-        get_latest_orders(db=db)
-
-        db.query.assert_called_with(entities.Order)
-        db.query().order_by.assert_called_with(desc_function)
-        db.query().order_by().limit.assert_called_with(50)
-        db.query().order_by().limit().all.assert_called_once()
-
-    @patch("server.db.repo.orders.entities.Order")
-    def test_should_query_the_latest_orders_with_specified_parameters(
-            self, order_instance
-    ):
-        limit = self.faker.pyint()
-        db = MagicMock()
-        desc_function = MagicMock()
-        order_instance.requested_at.desc.return_value = desc_function
-
-        get_latest_orders(db=db, limit=limit)
-
-        db.query.assert_called_with(entities.Order)
-        db.query().order_by.assert_called_with(desc_function)
-        db.query().order_by().limit.assert_called_with(limit)
-        db.query().order_by().limit().all.assert_called_once()
 
 
 class TestGetOrderByProductCode(Test):

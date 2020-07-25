@@ -12,6 +12,7 @@ def get_orders(
     limit: int = 50,
     moderator: str = None,
     owner: str = None,
+    desc: bool = True,
 ) -> Optional[List[entities.Order]]:
     """
     Get the registed orders using filters.
@@ -22,13 +23,19 @@ def get_orders(
         - limit: the number of entities to limit the query.
         - moderadtor: the moderator name that create the order.
         - owner: the owner name that receive the order.
-        - taken: filter orders that have already taken or not.
+        - desc: order by request_at datetime.
 
     Returns:
         - the list of orders or `None` if there are no orders to return
         using the filter specified.
     """
-    query = db.query(entities.Order)
+    order_by = (
+        entities.Order.requested_at.desc()
+        if desc
+        else entities.Order.requested_at.asc()
+    )
+
+    query = db.query(entities.Order).order_by(order_by)
 
     if moderator:
         query = query.filter_by(mod_display_name=moderator)
@@ -42,28 +49,6 @@ def get_orders(
 def get_orders_count(db: Session) -> int:
     """Return the number of entities from orders table."""
     return db.query(entities.Order).count()
-
-
-def get_latest_orders(
-    db: Session, limit: int = 50
-) -> Optional[List[entities.Order]]:
-    """
-    Get the latest orders filtered by the request at datetime.
-
-    Args:
-        - db: the database session.
-        - limit: the number of entities to limit the query.
-
-    Returns:
-        - the list of orders or `None` if there are no orders to return
-        using the filter specified.
-    """
-    return (
-        db.query(entities.Order)
-        .order_by(entities.Order.requested_at.desc())
-        .limit(limit)
-        .all()
-    )
 
 
 def get_order_by_product_code(
