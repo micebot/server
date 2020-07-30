@@ -76,10 +76,11 @@ poetry install
 docker-compose up
 ```
 
-3. Entre no *virtual env* e execute a aplicação:
+3. Entre no *virtual env*, rode as migrações e execute a aplicação:
 
 ```
 poetry shell
+alembic upgrade head
 uvicorn server:app --reload
 ```
 
