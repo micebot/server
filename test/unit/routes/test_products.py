@@ -188,10 +188,33 @@ class TestPut(TestRoute):
     @patch("server.routes.products.repo.get_product_by_uuid")
     @patch("server.routes.products.repo.get_product_by_code")
     @patch("server.routes.products.repo.update_product")
+    def test_should_return_401_when_the_product_is_already_taken(
+        self, update_product, get_product_by_code, get_product_by_uuid
+    ):
+        get_product_by_uuid_value = ProductFactory(taken=True)
+        get_product_by_uuid.return_value = get_product_by_uuid_value
+
+        response = self.client.put(
+            f"/products/{self.uuid}",
+            json={"code": self.product.code, "summary": self.product.summary},
+        )
+
+        self.assertEqual(401, response.status_code)
+        self.assertEqual(
+            {"detail": "The product is already taken and cannot be edited."},
+            response.json(),
+        )
+        get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
+        update_product.assert_not_called()
+        get_product_by_code.assert_not_called()
+
+    @patch("server.routes.products.repo.get_product_by_uuid")
+    @patch("server.routes.products.repo.get_product_by_code")
+    @patch("server.routes.products.repo.update_product")
     def test_should_return_409_when_the_new_code_is_already_in_use_by_another_product(  # noqa
         self, update_product, get_product_by_code, get_product_by_uuid
     ):
-        get_product_by_uuid_value = ProductFactory()
+        get_product_by_uuid_value = ProductFactory(taken=False)
         get_product_by_uuid.return_value = get_product_by_uuid_value
         get_product_by_code.return_value = ProductFactory()
 
@@ -217,7 +240,7 @@ class TestPut(TestRoute):
     def test_should_return_200_with_the_updated_product(
         self, update_product, get_product_by_code, get_product_by_uuid
     ):
-        get_product_by_uuid_value = ProductFactory()
+        get_product_by_uuid_value = ProductFactory(taken=False)
         updated_product_value = ProductFactory(
             code=self.product.code, summary=self.product.summary
         )
