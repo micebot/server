@@ -75,7 +75,7 @@ def update_product(
         if db_product.taken:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='The product is already taken and cannot be edited.'
+                detail="The product is already taken and cannot be edited.",
             )
 
         if repo.get_product_by_code(db=db, code=product.code):
