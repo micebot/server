@@ -131,7 +131,7 @@ unit tests:
 production:
   <<: *deploy
   script:
-    - dpl --provider=heroku --app=$HEROKU_SERVER_APP_NAME --api-key=$HEROKU_SERVER_KEY --skip-cleanup=true
+    - dpl --provider=heroku --app=$HEROKU_SERVER_APP_NAME --api-key=$HEROKU_SERVER_APP_KEY --skip-cleanup=true
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
@@ -141,7 +141,7 @@ production:
 staging:
   <<: *deploy
   script:
-    - dpl --provider=heroku --app=$HEROKU_SERVER_DEV_APP_NAME --api-key=$HEROKU_SERVER_KEY --skip-cleanup=true
+    - dpl --provider=heroku --app=$HEROKU_SERVER_DEV_APP_NAME --api-key=$HEROKU_SERVER_DEV_KEY --skip-cleanup=true
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "development"'
