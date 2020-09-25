@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy to Heroku
 
 on:
   push:
@@ -14,15 +14,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-      - run: |
-        python -m pip install --upgrade pip
-        pip install poetry
-        poetry --version
-        poetry export -f requirements.txt > requirements.txt
+
+      - name: Export the Heroku runtime
+        run: echo $HEROKU_RUNTIME > runtime.txt
+
+      # - name: Set up Python 3.x
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: "3.8"
+      # - run: |
+      #   python -m pip install --upgrade pip
+      #   pip install poetry
+      #   poetry --version
+      #   poetry export -f requirements.txt > requirements.txt
 
       - uses: actions/setup-ruby@v1
         with:
