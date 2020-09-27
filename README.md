@@ -16,7 +16,7 @@
 </div>
 <br>
 
-Bem-vindo(a)! Este repositório contém o *core* de toda a aplicação, responsável
+Bem-vindo(a)! Este repositório contém o _core_ de toda a aplicação, responsável
 por manter a persistência dos dados e as regras da nossa integração entre Twitch
 e o nosso bot do Discord. A ideia por trás desse projeto é automatizar o processo de entrega de premiações
 durante as lives do canal [@codigofalado][10].
@@ -39,8 +39,9 @@ Nossa "documentação viva" com Swagger que está online e disponível
 usuários seguintes:
 
 - Usuário I:
-    - username: `ps_user`
-    - password: `ps_pass`
+
+  - username: `ps_user`
+  - password: `ps_pass`
 
 - Usuário II:
   - username: `ds_user`
@@ -52,7 +53,7 @@ Também temos a [documentação estática][15], utilizando Redoc.
 
 <sub>**PS:** Pode ser que demore para carregar em um primeiro momento, isto porque
 estamos utilizando os dynos gratuitos do Heroku que "desligam" a aplicação após
-[30min de inatividade][16] (*isto é, sem nenhuma requisição nesse período*).</sub>
+[30min de inatividade][16] (_isto é, sem nenhuma requisição nesse período_).</sub>
 
 ## Contribuindo
 
@@ -64,6 +65,7 @@ seja criado na raiz do projeto, não é uma necessidade mas facilitará sua vida
 configurado:
 
 1. Clone este repositório e instale as dependências:
+
 ```
 git clone https://github.com/micebot/server.git
 cd ./server
@@ -72,11 +74,12 @@ poetry install
 ```
 
 2. Inicialize o container com o Postgres:
+
 ```
 docker-compose up
 ```
 
-3. Entre no *virtual env*, rode as migrações e execute a aplicação:
+3. Entre no _virtual env_, rode as migrações e execute a aplicação:
 
 ```
 poetry shell
@@ -84,26 +87,22 @@ alembic upgrade head
 uvicorn server:app --reload
 ```
 
-
 ## Development status
 
-| Branch | Pipeline | Coverage | 
-| ------ | ----- | ----- |
-| **Development** | [![pipeline status][1]][2] | ![coverage report][3] |
-| **Master** | [![pipeline status][5]][6] | ![coverage report][7] |
+| Branch | Pipeline |
+| **Development** | [![pipeline status][1]][2] |
+| **Master** | [![pipeline status][5]][6] |
 
-[1]:https://gitlab.com/micebot/server-ci/badges/development/pipeline.svg
-[2]:https://gitlab.com/micebot/server-ci/-/pipelines?page=1&scope=all&ref=development
-[3]:https://gitlab.com/micebot/server-ci/badges/development/coverage.svg
-[5]:https://gitlab.com/micebot/server-ci/badges/master/pipeline.svg
-[6]:https://gitlab.com/micebot/server-ci/-/pipelines?page=1&scope=all&ref=master
-[7]:https://gitlab.com/micebot/server-ci/badges/master/coverage.svg
-[9]:https://github.com/codigofalado/desafio333
-[10]:https://www.twitch.tv/codigofalado
-[11]:https://github.com/micebot/pubsub
-[12]:https://github.com/micebot/discord
-[14]:https://app-dev-micebot.herokuapp.com/docs
-[15]:https://app-dev-micebot.herokuapp.com/redoc
-[16]:https://devcenter.heroku.com/articles/free-dyno-hours
-[17]:https://python-poetry.org/docs/#installation
-[18]:https://python-poetry.org/docs/configuration/#virtualenvsin-project-boolean
+[1]: https://github.com/micebot/server/workflows/Continuous%20Integration%20&%20Deploy%20(Staging)/badge.svg
+[2]: https://github.com/micebot/server/actions?query=workflow%3A%22Continuous+Integration+%26+Deploy+%28Staging%29%22
+[5]: https://github.com/micebot/server/workflows/Continuous%20Integration%20&%20Deploy%20(Production)/badge.svg
+[6]: https://github.com/micebot/server/actions?query=workflow%3A%22Continuous+Integration+%26+Deploy+%28Production%29%22
+[9]: https://github.com/codigofalado/desafio333
+[10]: https://www.twitch.tv/codigofalado
+[11]: https://github.com/micebot/pubsub
+[12]: https://github.com/micebot/discord
+[14]: https://app-dev-micebot.herokuapp.com/docs
+[15]: https://app-dev-micebot.herokuapp.com/redoc
+[16]: https://devcenter.heroku.com/articles/free-dyno-hours
+[17]: https://python-poetry.org/docs/#installation
+[18]: https://python-poetry.org/docs/configuration/#virtualenvsin-project-boolean
