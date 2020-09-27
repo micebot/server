@@ -1,0 +1,69 @@
+on: [push, pull_request]
+
+name: Continuous Integration & Deploy
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry --version
+          poetry install
+
+      # Pydocstyle:
+      #   - D101: Missing docstring in public class.
+      #   - D102: Missing docstring in public method.
+      #   - D103: Missing docstring in public function.
+      - name: Quality
+        run: |
+          poetry run pylama server
+          poetry run pydocstyle --select=D101,D102,D103 server
+          poetry run black -l 79 --check server
+
+      - name: Testing and code coverage
+        run: |
+          poetry run coverage run -m unittest discover -s test/unit -v
+          poetry run coverage report
+
+  cd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Export Heroku runtime
+        run: echo "python-3.8.3" > runtime.txt
+
+      - name: Export Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry --version
+          poetry export -f requirements.txt > requirements.txt
+
+      - name: Deploy to staging environment
+        # if: ${{ github.ref == 'master' }}
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+        run: |
+          gem install dpl
+          dpl --provider=heroku --app=${{ secrets.HEROKU_STAGING_SERVER_APP_NAME }} --api-key=${{ secrets.HEROKU_STAGING_SERVER_KEY }} --skip-cleanup=true
+
+      - name: Deploy to production environment
+        if: ${{ github.ref == 'master' }}
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+        run: |
+          gem install dpl
+          dpl --provider=heroku --app=${{ secrets.HEROKU_STAGING_SERVER_APP_NAME }} --api-key=${{ secrets.HEROKU_STAGING_SERVER_KEY }} --skip-cleanup=true
