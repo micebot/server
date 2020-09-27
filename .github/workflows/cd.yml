@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
-        run: |
+
+      - run: |
           gem install dpl
           dpl --provider=heroku --app=${{ secrets.HEROKU_STAGING_SERVER_APP_NAME }} --api-key=${{ secrets.HEROKU_STAGING_SERVER_KEY }} --skip-cleanup=true
