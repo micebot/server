@@ -1,0 +1,37 @@
+on:
+  [push]
+  # branches: development
+  # tags:
+  #   - "v*.*.*"
+
+name: Continuous Deploy
+
+jobs:
+  export-heroku-runtime:
+    name: Export Heroku runtime
+    runs-on: ubuntu-latest
+    steps:
+      run: echo "$HEROKU_RUNTIME" > runtime.txt
+
+  export-python-dependencies:
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.0.10"
+      - name: Export Python dependencies
+        run: poetry export -f requirements.txt > requirements.txt
+
+  deploy:
+    name: Deploy to Heroku
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: akhileshns/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_STAGING_SERVER_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_STAGING_SERVER_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_SERVER_EMAIL}}
