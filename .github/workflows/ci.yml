@@ -1,12 +1,21 @@
-name: CI
+on:
+  push:
+    branches-ignore:
+      - master
+      - development
+  pull_request:
+    branches-ignore:
+      - master
+      - development
 
-on: [push, pull_request]
+name: Continuous Integration
 
 jobs:
-  continuous-integration:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
@@ -17,7 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry --version
-          poetry config virtualenvs.in-project true
           poetry install
 
       # Pydocstyle:
