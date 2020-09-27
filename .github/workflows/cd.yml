@@ -1,4 +1,9 @@
-on: push
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types:
+      - completed
+      - requested
 
 name: Continuous Deploy
 
