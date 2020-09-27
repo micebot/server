@@ -4,35 +4,37 @@ name: Continuous Integration
 
 jobs:
   quality:
-    - uses: actions/checkout@v2
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: "3.8"
-    - name: Setup Poetry
-      uses: abatilo/actions-poetry@v2.0.0
-      with:
-        poetry-version: ${{ matrix.poetry-version }}
-    # Pydocstyle:
-    #   - D101: Missing docstring in public class.
-    #   - D102: Missing docstring in public method.
-    #   - D103: Missing docstring in public function.
-    - name: Run linter and quality tools
-      run: |
-        poetry run pylama server
-        poetry run pydocstyle --select=D101,D102,D103 server
-        poetry run black -l 79 --check server
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ matrix.poetry-version }}
+      # Pydocstyle:
+      #   - D101: Missing docstring in public class.
+      #   - D102: Missing docstring in public method.
+      #   - D103: Missing docstring in public function.
+      - name: Run linter and quality tools
+        run: |
+          poetry run pylama server
+          poetry run pydocstyle --select=D101,D102,D103 server
+          poetry run black -l 79 --check server
 
   testing:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-        python-version: "3.8"
-    - name: Setup Poetry
-      uses: abatilo/actions-poetry@v2.0.0
-      with:
-        poetry-version: "1.0.10"
-    - name: Run unit tests and collect code coverage
-      run: |
-        poetry run coverage run -m unittest discover -s test/unit -v
-        poetry run coverage report
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.0.10"
+      - name: Run unit tests and collect code coverage
+        run: |
+          poetry run coverage run -m unittest discover -s test/unit -v
+          poetry run coverage report
