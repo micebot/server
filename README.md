@@ -87,11 +87,12 @@ alembic upgrade head
 uvicorn server:app --reload
 ```
 
-## Development status
+## Workflows
 
-| Branch | Pipeline |
+| Branch | Status |
+| ------ | ------ |
 | **Development** | [![pipeline status][1]][2] |
-| **Master** | [![pipeline status][5]][6] |
+| **Master** | [![pipeline status][5]][6]|
 
 [1]: https://github.com/micebot/server/workflows/Continuous%20Integration%20&%20Deploy%20(Staging)/badge.svg
 [2]: https://github.com/micebot/server/actions?query=workflow%3A%22Continuous+Integration+%26+Deploy+%28Staging%29%22
