@@ -1,9 +1,9 @@
 on:
   push:
     branches:
-      - development
+      - master
 
-  name: Continuous Integration & Deploy (Staging)
+  name: Continuous Integration & Deploy (Production)
 
   jobs:
     ci:
