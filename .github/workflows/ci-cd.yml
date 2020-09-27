@@ -60,7 +60,7 @@ jobs:
           dpl --provider=heroku --app=${{ secrets.HEROKU_STAGING_SERVER_APP_NAME }} --api-key=${{ secrets.HEROKU_STAGING_SERVER_KEY }} --skip-cleanup=true
 
       - name: Deploy to production environment
-        if: ${{ github.ref == 'master' }}
+        if: github.ref == 'master'
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
