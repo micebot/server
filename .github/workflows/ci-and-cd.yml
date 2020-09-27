@@ -1,4 +1,9 @@
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+      - development
 
 name: Continuous Integration & Deploy
 
@@ -57,12 +62,12 @@ jobs:
           poetry export -f requirements.txt > requirements.txt
 
       - name: Set up Ruby 2.x
-        # if: ${{ github.ref == 'master' }}
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
 
       - name: Deploy to staging environment
+        if: github.ref == 'development'
         run: |
           gem install dpl
           dpl --provider=heroku --app=${{ secrets.HEROKU_STAGING_SERVER_APP_NAME }} --api-key=${{ secrets.HEROKU_STAGING_SERVER_KEY }} --skip-cleanup=true
