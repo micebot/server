@@ -3,37 +3,28 @@ on: [push, pull_request]
 name: Continuous Integration
 
 jobs:
-  quality:
+  continuous-integration:
     runs-on: ubuntu-latest
     steps:
-      - name: Check codestyle
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-        uses: abatilo/actions-poetry@v2.0.0
+      - uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: "1.0.10"
-        # Pydocstyle:
-        #   - D101: Missing docstring in public class.
-        #   - D102: Missing docstring in public method.
-        #   - D103: Missing docstring in public function.
+      # Pydocstyle:
+      #   - D101: Missing docstring in public class.
+      #   - D102: Missing docstring in public method.
+      #   - D103: Missing docstring in public function.
+      - name: Quality
         run: |
           poetry run pylama server
           poetry run pydocstyle --select=D101,D102,D103 server
           poetry run black -l 79 --check server
 
-  test-suite:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Unit test and coverage
-        uses: actions/checkout@v2
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-        uses: abatilo/actions-poetry@v2.0.0
-        with:
-          poetry-version: "1.0.10"
+      - name: Testing and code coverage
         run: |
           poetry run coverage run -m unittest discover -s test/unit -v
           poetry run coverage report
