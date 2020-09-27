@@ -4,13 +4,14 @@ name: Continuous Integration
 
 jobs:
   quality:
+    runs-on: ubuntu-latest
     steps:
       - name: Check codestyle
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+        uses: actions/checkout@v2
+        uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-      - uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: "1.0.10"
         # Pydocstyle:
@@ -23,13 +24,14 @@ jobs:
           poetry run black -l 79 --check server
 
   test-suite:
+    runs-on: ubuntu-latest
     steps:
       - name: Unit test and coverage
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+        uses: actions/checkout@v2
+        uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-      - uses: abatilo/actions-poetry@v2.0.0
+        uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: "1.0.10"
         run: |
