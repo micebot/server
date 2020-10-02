@@ -16,10 +16,9 @@
 </div>
 <br>
 
-Bem-vindo(a)! Este repositório contém o _core_ de toda a aplicação, responsável
-por manter a persistência dos dados e as regras da nossa integração entre Twitch
-e o nosso bot do Discord. A ideia por trás desse projeto é automatizar o processo de entrega de premiações
-durante as lives do canal [@codigofalado][10].
+Bem-vindo(a)! Este repositório contém o _core_ de toda a aplicação, responsável por manter a persistência dos dados
+e as regras da nossa integração entre Twitch e o nosso bot do Discord. A ideia por trás desse projeto é automatizar
+o processo de entrega de premiações durante as lives do canal [@codigofalado][10].
 
 Veja também os outros projetos:
 
@@ -57,12 +56,10 @@ estamos utilizando os dynos gratuitos do Heroku que "desligam" a aplicação ap�
 
 ## Contribuindo
 
-Para executar este projeto é necessário que você tenha o Python 3.8+ instalado,
-o [Poetry][17] e o Docker (docker compose). Recomendamos utilizar a configuração
-[`poetry virtualenvs.in-project`][18] como `true` para que o ambiente virtual
-seja criado na raiz do projeto, não é uma necessidade mas facilitará sua vida.
-**;)** Tendo tudo devidamente instalado e
-configurado:
+Para executar este projeto é necessário que você tenha o Python 3.8+ instalado, o [Poetry][17] e o Postgresql como
+banco de dados. Nós preferimos utilizar um container Docker para a parte do BD. Recomendamos utilizar a configuração
+[`poetry virtualenvs.in-project`][18] como `true` para que o ambiente virtual seja criado na raiz do projeto, não é
+uma necessidade mas facilitará sua vida. **;)** Tendo tudo devidamente instalado e configurado:
 
 1. Clone este repositório e instale as dependências:
 
@@ -73,10 +70,10 @@ cd ./server
 poetry install
 ```
 
-2. Inicialize o container com o Postgres:
+2. Execute um container com a imagem do Postgresql 12 linkado à porta 5432:
 
 ```
-docker-compose up
+docker run --name micebot_db -p 5432:5432 -e POSTGRES_DB=micebot -e POSTGRES_USER=micebot -e POSTGRES_PASSWORD=micebot -d postgres:12
 ```
 
 3. Entre no _virtual env_, rode as migrações e execute a aplicação:
@@ -89,10 +86,10 @@ uvicorn server:app --reload
 
 ## Workflows
 
-| Branch | Status |
-| ------ | ------ |
+| Branch          | Status                     |
+| --------------- | -------------------------- |
 | **Development** | [![pipeline status][1]][2] |
-| **Master** | [![pipeline status][5]][6]|
+| **Master**      | [![pipeline status][5]][6] |
 
 [1]: https://github.com/micebot/server/workflows/Continuous%20Integration%20&%20Deploy%20(Staging)/badge.svg
 [2]: https://github.com/micebot/server/actions?query=workflow%3A%22Continuous+Integration+%26+Deploy+%28Staging%29%22
