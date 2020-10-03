@@ -12,6 +12,7 @@ class Environment(BaseSettings):
 
     """
 
+    version: str = "0.2.0"
     database_url: str = "postgresql://micebot:micebot@localhost:5432/micebot"
     production: bool = False
     secret_key: str = "secret-key"
