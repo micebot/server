@@ -17,6 +17,7 @@ class Environment(BaseSettings):
     production: bool = False
     secret_key: str = "secret-key"
     token_algorithm: str = "HS256"
+    token_expiration: int = 20
 
 
 env: Environment = Environment()
