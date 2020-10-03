@@ -40,7 +40,9 @@ async def auth(
 
 
 def create_access_token(
-    *, data: Dict, expires_delta: timedelta = timedelta(minutes=20)
+    *,
+    data: Dict,
+    expires_delta: timedelta = timedelta(minutes=env.TOKEN_EXPIRATION)
 ):
     """
     Create an access token.

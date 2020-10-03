@@ -17,6 +17,7 @@ class Environment(BaseSettings):
     PRODUCTION: bool = False
     SECRET_KEY: str = "secret-key"
     TOKEN_ALGORITHM: str = "HS256"
+    TOKEN_EXPIRATION: int = 20
 
     class Config:
         case_sensitive: True
