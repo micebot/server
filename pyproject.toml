@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "server"
-version = "dev"
+version = "0.0.0"
 description = "The Micebot core application."
 authors = ["MiceBot Collaborators."]
 license = "MIT"
