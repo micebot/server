@@ -17,5 +17,7 @@ class Environment(BaseSettings):
     SECRET_KEY: str = "secret-key"
     TOKEN_ALGORITHM: str = "HS256"
 
+    class Config:
+        case_sensitive = True
 
 env: Environment = Environment()
