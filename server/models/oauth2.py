@@ -23,7 +23,7 @@ async def auth(
     """Authorize the application to use our API."""
     try:
         uname = decode(
-            token, env.secret_key, algorithms=[env.token_algorithm]
+            token, env.SECRET_KEY, algorithms=[env.TOKEN_ALGORITHM]
         ).get("sub")
 
         if not uname:
@@ -55,5 +55,5 @@ def create_access_token(
     data_to_encode = data.copy()
     data_to_encode.update({"exp": datetime.utcnow() + expires_delta})
     return encode(
-        data_to_encode, env.secret_key, algorithm=env.token_algorithm
+        data_to_encode, env.SECRET_KEY, algorithm=env.TOKEN_ALGORITHM
     )

@@ -10,7 +10,7 @@ def open_session() -> Iterator[Session]:
     """Get a session from database connection."""
     try:
         db = sessionmaker(
-            bind=create_engine(env.database_url),
+            bind=create_engine(env.DATABASE_URL),
             autocommit=False,
             autoflush=False,
         )()

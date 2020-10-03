@@ -12,11 +12,14 @@ class Environment(BaseSettings):
 
     """
 
-    version: str = "0.2.0"
-    database_url: str = "postgresql://micebot:micebot@localhost:5432/micebot"
-    production: bool = False
-    secret_key: str = "secret-key"
-    token_algorithm: str = "HS256"
+    VERSION: str = "0.2.0"
+    DATABASE_URL: str = "postgresql://micebot:micebot@localhost:5432/micebot"
+    PRODUCTION: bool = False
+    SECRET_KEY: str = "secret-key"
+    TOKEN_ALGORITHM: str = "HS256"
+
+    class Config:
+        case_sensitive: True
 
 
 env: Environment = Environment()
