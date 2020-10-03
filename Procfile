@@ -1,1 +1,1 @@
-web: alembic upgrade head & uvicorn server:app --host=0.0.0.0 --port=${PORT:-5000}
+web: alembic upgrade head && gunicorn -k uvicorn.workers.UvicornWorker --bind "0.0.0.0:${PORT:-5000}" server:app
