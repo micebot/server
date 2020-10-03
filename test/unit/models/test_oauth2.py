@@ -21,10 +21,10 @@ class TestCreateAccessToken(Test):
     @patch("server.models.oauth2.env")
     @patch("server.models.oauth2.encode")
     def test_should_encode_access_token(self, encode, env):
-        secret_key = self.faker.sha256()
+        SECRET_KEY = self.faker.sha256()
         algorithm = self.faker.word()
-        env.secret_key = secret_key
-        env.token_algorithm = algorithm
+        env.SECRET_KEY = SECRET_KEY
+        env.TOKEN_ALGORITHM = algorithm
         expires_at = timedelta(minutes=5)
         data = {"data_to_encode": "jubileu"}
 
@@ -34,7 +34,7 @@ class TestCreateAccessToken(Test):
         create_access_token(data=data, expires_delta=expires_at)
 
         encode.assert_called_with(
-            data_to_encode, secret_key, algorithm=algorithm
+            data_to_encode, SECRET_KEY, algorithm=algorithm
         )
 
 

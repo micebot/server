@@ -29,17 +29,17 @@ t_app = sa.table(
 def upgrade():
     """Added the initial applications user/pass."""
     ps_app = Application(
-        username=environ.get("PUBSUB_USER") if env.production else "ps_user"
+        username=environ.get("PUBSUB_USER") if env.PRODUCTION else "ps_user"
     )
     ps_app.password = (
-        environ.get("PUBSUB_PASS") if env.production else "ps_pass"
+        environ.get("PUBSUB_PASS") if env.PRODUCTION else "ps_pass"
     )
 
     ds_app = Application(
-        username=environ.get("DISCORD_USER") if env.production else "ds_user"
+        username=environ.get("DISCORD_USER") if env.PRODUCTION else "ds_user"
     )
     ds_app.password = (
-        environ.get("DISCORD_PASS") if env.production else "ds_pass"
+        environ.get("DISCORD_PASS") if env.PRODUCTION else "ds_pass"
     )
 
     op.bulk_insert(
