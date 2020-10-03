@@ -4,9 +4,13 @@ on:
       - master
       - development
   pull_request:
-    branches-ignore:
-      - master
+    branches:
       - development
+    paths:
+      - ".github/workflows/**"
+      - "**.py"
+      - "pyproject.toml"
+      - "poetry.lock"
 
 name: Continuous Integration
 

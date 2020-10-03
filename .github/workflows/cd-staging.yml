@@ -2,6 +2,11 @@ on:
   push:
     branches:
       - development
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - .gitignore
+      - .coveragerc
 
 name: Continuous Integration & Deploy (Staging)
 
