@@ -8,11 +8,11 @@ from server.routes.heartbeat import router as heartbeat
 
 app = FastAPI(
     title="MiceBot",
-    version=env.version,
+    version=env.VERSION,
     description="The MiceBot core.",
-    debug=not env.production,
-    docs_url="/docs" if not env.production else None,
-    redoc_url="/redoc" if not env.production else None,
+    debug=not env.PRODUCTION,
+    docs_url="/docs" if not env.PRODUCTION else None,
+    redoc_url="/redoc" if not env.PRODUCTION else None,
 )
 app.include_router(auth, prefix="/auth", tags=["authentication"])
 app.include_router(products, prefix="/products", tags=["products"])

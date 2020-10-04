@@ -17,7 +17,7 @@ target_metadata = Base.metadata
 def run_migrations_offline():
     """Run migrations in 'offline' mode."""
     context.configure(
-        url=env.database_url,
+        url=env.DATABASE_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -30,7 +30,7 @@ def run_migrations_offline():
 def run_migrations_online():
     """Run migrations in 'online' mode."""
 
-    connectable = create_engine(env.database_url)
+    connectable = create_engine(env.DATABASE_URL)
 
     with connectable.connect() as connection:
         context.configure(

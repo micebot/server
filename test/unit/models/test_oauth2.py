@@ -23,8 +23,8 @@ class TestCreateAccessToken(Test):
     def test_should_encode_access_token(self, encode, env):
         secret_key = self.faker.sha256()
         algorithm = self.faker.word()
-        env.secret_key = secret_key
-        env.token_algorithm = algorithm
+        env.SECRET_KEY = secret_key
+        env.TOKEN_ALGORITHM = algorithm
         expires_at = timedelta(minutes=5)
         data = {"data_to_encode": "jubileu"}
 
