@@ -53,7 +53,7 @@ class ProductWithTotal(BaseModel):
     """The total product counter with the products entities."""
 
     total: ProductCount
-    products: List[Product]
+    products: List[Product] = []
 
 
 class OrderBase(BaseModel):

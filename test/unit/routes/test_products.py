@@ -14,34 +14,6 @@ class TestGet(TestRoute):
         self.taken = self.faker.boolean()
         self.desc = self.faker.boolean()
 
-    @patch("server.routes.products.repo.get_products")
-    def test_should_return_404_when_there_are_no_products_registered(
-        self, get_products
-    ):
-        get_products.return_value = None
-
-        response = self.client.get(
-            "/products",
-            params={
-                "skip": self.skip,
-                "limit": self.limit,
-                "taken": self.taken,
-                "desc": self.desc,
-            },
-        )
-        self.assertEqual(404, response.status_code)
-        self.assertEqual(
-            {"detail": "No products registered yet."}, response.json()
-        )
-
-        get_products.assert_called_with(
-            db=self.db,
-            skip=self.skip,
-            limit=self.limit,
-            taken=self.taken,
-            desc=self.desc,
-        )
-
     @patch("server.routes.products.repo.get_products_count")
     @patch("server.routes.products.repo.get_products")
     def test_should_return_200_with_entities(

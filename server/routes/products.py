@@ -22,24 +22,20 @@ def get_products(
     db: Session = Depends(auth),
 ):
     """Get all the products."""
-    if entities := repo.get_products(
+    products = repo.get_products(
         db=db, skip=skip, limit=limit, taken=taken, desc=desc
-    ):
-        total, total_available, total_taken = repo.get_products_count(db=db)
-
-        return {
-            "total": {
-                "all": total,
-                "taken": total_taken,
-                "available": total_available,
-            },
-            "products": entities,
-        }
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="No products registered yet.",
     )
+
+    total, total_available, total_taken = repo.get_products_count(db=db)
+
+    return {
+        "total": {
+            "all": total,
+            "taken": total_taken,
+            "available": total_available,
+        },
+        "products": products,
+    }
 
 
 @router.post(
