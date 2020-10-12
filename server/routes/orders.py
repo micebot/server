@@ -24,20 +24,16 @@ def get_orders(
     db: Session = Depends(auth),
 ):
     """Get all the orders."""
-    if entities := repo.get_orders(
+    entities = repo.get_orders(
         db=db,
         skip=skip,
         limit=limit,
         moderator=moderator,
         owner=owner,
         desc=desc,
-    ):
-        return {"total": repo.get_orders_count(db=db), "orders": entities}
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="No orders registered yet.",
     )
+
+    return {"total": repo.get_orders_count(db=db), "orders": entities}
 
 
 @router.post(
