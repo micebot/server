@@ -1,13 +1,7 @@
 on:
-  push:
-    branches:
-      - development
-
-    paths-ignore:
-      - README.md
-      - LICENSE
-      - .gitignore
-      - .coveragerc
+  create:
+    tags:
+      - "*"
 
 name: Deploy to production
 
