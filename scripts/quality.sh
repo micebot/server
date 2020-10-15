@@ -35,7 +35,7 @@ fi
 #   - D101: Missing docstring in public class.
 #   - D102: Missing docstring in public method.
 #   - D103: Missing docstring in public function.
-if pydocstyle --select=D101,D102,D103 server
+if poetry run pydocstyle --select=D101,D102,D103 server
 then
     echo Verified the docstring on python files.
 else
