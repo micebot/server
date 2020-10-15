@@ -37,10 +37,10 @@ jobs:
       - name: export Heroku runtime
         run: echo "python-3.8.3" > runtime.txt
 
-      - name: Export Python dependencies
+      - name: export Python dependencies
         run: poetry export -f requirements.txt > requirements.txt
 
-      - name: setup Ruby 2.x
+      - name: setup ruby environment
         uses: actions/setup-ruby@v1
         with:
           ruby-version: "2.7"
