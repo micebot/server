@@ -39,6 +39,10 @@ class ProductDelete(BaseModel):
     """The responde schema for a product deletion."""
 
     deleted: bool
+    product: Product
+
+    class Config:
+        orm_mode = True
 
 
 class ProductCount(BaseModel):

@@ -104,7 +104,10 @@ def delete_product(uuid: str, db: Session = Depends(auth)):
                 detail="Cannot delete products already taken.",
             )
         repo.delete_product(db=db, product=product)
-        return {"deleted": True}
+        return {
+            "deleted": True,
+            "product": product,
+        }
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,

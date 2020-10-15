@@ -306,7 +306,24 @@ class TestDelete(TestRoute):
         response = self.client.delete(f"/products/{self.uuid}")
 
         self.assertEqual(200, response.status_code)
-        self.assertEqual({"deleted": True}, response.json())
+        self.assertEqual(
+            {
+                "deleted": True,
+                "product": {
+                    "code": product.code,
+                    "created_at": TestHelpers.datetime_to_str(
+                        product.created_at
+                    ),
+                    "summary": product.summary,
+                    "taken": product.taken,
+                    "updated_at": TestHelpers.datetime_to_str(
+                        product.updated_at
+                    ),
+                    "uuid": product.uuid,
+                },
+            },
+            response.json(),
+        )
 
         get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
         delete_product.assert_called_with(db=self.db, product=product)
