@@ -1,8 +1,7 @@
+from test.unit.factories import OrderFactory, ProductFactory
+from test.unit.fixtures import TestHelpers, TestRoute
 from typing import NoReturn
 from unittest.mock import patch
-
-from test.unit.factories import OrderFactory, ProductFactory
-from test.unit.fixtures import TestRoute, TestHelpers
 
 
 class TestGetAllOrders(TestRoute):
@@ -34,7 +33,7 @@ class TestGetAllOrders(TestRoute):
                 "limit": self.limit,
                 "moderator": self.moderator,
                 "owner": self.owner,
-                "desc": self.desc
+                "desc": self.desc,
             },
         )
 
@@ -76,7 +75,7 @@ class TestGetAllOrders(TestRoute):
             limit=self.limit,
             moderator=self.moderator,
             owner=self.owner,
-            desc=self.desc
+            desc=self.desc,
         )
 
 
@@ -115,7 +114,8 @@ class TestPost(TestRoute):
 
         self.assertEqual(409, response.status_code)
         self.assertEqual(
-            {"detail": "The product code is already taken."}, response.json(),
+            {"detail": "The product code is already taken."},
+            response.json(),
         )
         get_product_by_uuid.assert_called_with(db=self.db, uuid=self.uuid)
 

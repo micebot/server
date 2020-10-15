@@ -1,4 +1,11 @@
 from datetime import timedelta
+from test.unit.factories import ApplicationFactory
+from test.unit.fixtures import (
+    DEFAULT_DATETIME,
+    DEFAULT_DATETIME_STR,
+    Test,
+    TestAsync,
+)
 from unittest.mock import patch
 
 from fastapi import HTTPException
@@ -6,14 +13,7 @@ from fastapi.params import Depends
 from freezegun import freeze_time
 from jwt import PyJWTError
 
-from server.models.oauth2 import create_access_token, auth
-from test.unit.factories import ApplicationFactory
-from test.unit.fixtures import (
-    Test,
-    DEFAULT_DATETIME_STR,
-    DEFAULT_DATETIME,
-    TestAsync,
-)
+from server.models.oauth2 import auth, create_access_token
 
 
 class TestCreateAccessToken(Test):

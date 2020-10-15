@@ -7,8 +7,8 @@ Create Date: 2020-07-02 01:10:46.950587
 """
 from os import environ
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 from server import env
 from server.db.entities import Application

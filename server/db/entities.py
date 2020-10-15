@@ -2,12 +2,12 @@ from typing import NoReturn
 from uuid import uuid4
 
 from sqlalchemy import (
-    Column,
-    Integer,
-    String,
     Boolean,
+    Column,
     DateTime,
     ForeignKey,
+    Integer,
+    String,
     sql,
 )
 from sqlalchemy.dialects.postgresql import UUID

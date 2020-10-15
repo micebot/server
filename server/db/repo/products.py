@@ -1,4 +1,4 @@
-from typing import Optional, List, NoReturn, Tuple
+from typing import List, NoReturn, Optional, Tuple
 
 from sqlalchemy.orm import Session
 

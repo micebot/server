@@ -1,18 +1,18 @@
+from test.unit.factories import ProductFactory
+from test.unit.fixtures import Test
 from unittest.mock import MagicMock, patch
 
 from server.db import entities
 from server.db.repo.products import (
-    get_products,
     create_product,
-    update_product,
     delete_product,
-    get_product_by_uuid,
     get_product_by_code,
+    get_product_by_uuid,
+    get_products,
     get_products_count,
+    update_product,
 )
 from server.models import schemas
-from test.unit.factories import ProductFactory
-from test.unit.fixtures import Test
 
 
 class TestGetProducts(Test):

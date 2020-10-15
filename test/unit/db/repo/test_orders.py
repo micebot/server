@@ -1,15 +1,15 @@
+from test.unit.factories import OrderFactory
+from test.unit.fixtures import Test
 from unittest.mock import MagicMock, patch
 
 from server.db import entities
 from server.db.repo.orders import (
-    get_orders,
-    get_order_by_product_code,
     create_order_for_product,
+    get_order_by_product_code,
+    get_orders,
     get_orders_count,
 )
 from server.models import schemas
-from test.unit.factories import OrderFactory
-from test.unit.fixtures import Test
 
 
 class TestGetOrders(Test):

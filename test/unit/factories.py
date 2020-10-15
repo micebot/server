@@ -1,6 +1,6 @@
 import factory
 
-from server.db.entities import Product, Order, Application
+from server.db.entities import Application, Order, Product
 
 
 class ProductFactory(factory.Factory):

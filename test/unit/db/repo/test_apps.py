@@ -1,8 +1,8 @@
-from unittest.mock import patch, MagicMock
+from test.unit.fixtures import Test
+from unittest.mock import MagicMock, patch
 
 from server.db import entities
 from server.db.repo.apps import auth_application, get_app_by_uname
-from test.unit.fixtures import Test
 
 
 class TestGetAppByName(Test):

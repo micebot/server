@@ -5,8 +5,8 @@ Revises: acac5d708491
 Create Date: 2020-07-20 17:20:32.954964
 
 """
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 revision = "1ba1b384f25c"

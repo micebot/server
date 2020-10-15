@@ -1,7 +1,6 @@
-from unittest.mock import patch
-
 from test.unit.factories import ApplicationFactory
 from test.unit.fixtures import TestRoute
+from unittest.mock import patch
 
 
 class TestPost(TestRoute):

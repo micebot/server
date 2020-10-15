@@ -1,7 +1,7 @@
+from test.unit.fixtures import Test
 from unittest.mock import patch
 
 from server.db import open_session
-from test.unit.fixtures import Test
 
 
 class TestSession(Test):

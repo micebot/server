@@ -1,8 +1,7 @@
 from logging.config import fileConfig
 
-from sqlalchemy import create_engine
-
 from alembic import context
+from sqlalchemy import create_engine
 
 from server.db.entities import Base
 from server.env import env

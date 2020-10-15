@@ -1,9 +1,9 @@
+from test.unit.factories import ProductFactory
+from test.unit.fixtures import TestHelpers, TestRoute
 from typing import NoReturn
 from unittest.mock import patch
 
 from server.models import schemas
-from test.unit.factories import ProductFactory
-from test.unit.fixtures import TestRoute, TestHelpers
 
 
 class TestGet(TestRoute):
