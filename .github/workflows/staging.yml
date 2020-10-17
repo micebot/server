@@ -34,6 +34,9 @@ jobs:
       - name: unit tests and code coverage
         run: ./scripts/test.sh
 
+      - name: upload code coverage
+        uses: codecov/codecov-action@v1
+
       - name: export Heroku runtime
         run: echo "python-3.8.3" > runtime.txt
 
