@@ -17,19 +17,13 @@
     <a href='https://github.com/micebot/server/actions?query=workflow%3A%22Deploy+to+staging%22'>
         <img src='https://github.com/micebot/server/workflows/Deploy%20to%20staging/badge.svg'/>
     </a>
+    <a href='https://github.com/micebot/server/actions?query=workflow%3A%22Deploy+to+production%22'>
+        <img src='https://github.com/micebot/server/workflows/Deploy%20to%20production/badge.svg'/>
+    </a>
     <a href='https://codecov.io/gh/micebot/server/branch/development'>
         <img src='https://codecov.io/gh/micebot/server/branch/development/graph/badge.svg'>
     </a>
 </div>
-<div align='center'>
-    <a href='https://github.com/micebot/server/actions?query=workflow%3A%22Deploy+to+production%22'>
-        <img src='https://github.com/micebot/server/workflows/Deploy%20to%20production/badge.svg'/>
-    </a>
-    <a href='https://codecov.io/gh/micebot/server/branch/master'>
-        <img src='https://codecov.io/gh/micebot/server/branch/master/graph/badge.svg'>
-    </a>
-</div>
-<br>
 
 Este repositório contém o _core_ de toda a aplicação, responsável por manter a persistência dos dados e as regras do nosso [bot da Twitch][1] e o nosso [bot do Discord][2]. A ideia por trás desse projeto é automatizar o processo de entrega de premiações (inicialmente, somente e-books) durante as lives do canal [@codigofalado][3].
 
