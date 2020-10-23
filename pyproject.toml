@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "server"
-version = "0.0.0"
+version = "0.2.5"
 description = "The Micebot core application."
 authors = ["MiceBot Collaborators."]
 license = "MIT"
@@ -9,7 +9,6 @@ repository = "https://github.com/micebot/server.git"
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.60.1"
-uvicorn = "^0.11.5"
 sqlalchemy = "^1.3.18"
 alembic = "^1.4.2"
 psycopg2 = "^2.8.5"
@@ -17,6 +16,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 pyjwt = "^1.7.1"
 python-multipart = "^0.0.5"
 gunicorn = "^20.0.4"
+uvicorn = {extras = ["standard"], version = "^0.12.2"}
 
 [tool.poetry.dev-dependencies]
 coverage = "^5.1"
